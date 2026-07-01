@@ -1,897 +1,741 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="manifest.json">
-
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            font-size: 18px;
-            background: #f7fcf8; /* soft pale green tint */
-        }
-
-        /* SPLASH SCREEN — Option 3 Pale Green */
-        #splash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #e8f5e9; /* pale green */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 22px;
-            z-index: 9999;
-            opacity: 1;
-            transition: opacity 1s ease;
-        }
-
-        #splashTitle {
-            font-size: 26px;
-            margin-bottom: 10px;
-            color: #212121; /* charcoal */
-        }
-
-        #splashDate {
-            font-size: 22px;
-            color: #212121; /* charcoal */
-        }
-
-        /* Search Bar */
-        #searchBar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 10px;
-            background: #e8f5e9; /* pale green accent */
-            display: none;
-        }
-
-        #searchInput {
-            width: 100%;
-            font-size: 18px;
-            padding: 8px;
-        }
-
-        /* List Window */
-        #listWindow {
-            position: fixed;
-            top: 60px;
-            bottom: 200px;
-            left: 0;
-            right: 0;
-            overflow-y: auto;
-            padding: 10px;
-            display: none;
-        }
-
-        /* Card-style list entries */
-        .entry {
-            background: white;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-        }
-
-        .line1 {
-            font-size: 18px;
-            color: #212121; /* charcoal */
-        }
-
-        .line2 {
-            font-size: 18px;
-            margin-left: 10px;
-            color: #444;
-        }
-
-        /* Detail Panel */
-        #detailPanel {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 200px;
-            overflow-y: auto;
-            background: #fafafa;
-            padding: 10px;
-            border-top: 1px solid #ccc;
-            display: none;
-        }
-
-        .indent {
-            margin-left: 20px;
-            font-size: 17px;
-        }
-
-        /* Two-column layout */
-        .flexrow {
-            display: flex;
-            flex-direction: row;
-            gap: 40px;
-        }
-    </style>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<link rel='manifest' href='manifest.json'>
+<style>
+body { margin:0; font-family: Arial, sans-serif; background:#f7fcf8; }
+#splash { position:fixed; top:0; left:0; right:0; bottom:0; background:#e8f5e9; display:flex; align-items:center; justify-content:center; flex-direction:column; font-size:28px; color:#212121; z-index:9999; }
+#search { width:100%; padding:12px; font-size:18px; border:none; background:#e8f5e9; }
+#list { padding:12px; margin-bottom:160px; }
+.entry { background:white; border-radius:6px; padding:12px; margin-bottom:10px; box-shadow:0 1px 3px rgba(0,0,0,0.12); }
+.line1 { font-size:18px; color:#212121; }
+.line2 { font-size:18px; color:#444; }
+#detail { position:fixed; bottom:0; left:0; right:0; background:white; padding:16px; border-top:1px solid #ccc; }
+.indent { margin-left:20px; font-size:17px; }
+.cols { display:flex; gap:40px; }
+</style>
 </head>
-
 <body>
+<div id='splash'>Villa San Leandro Contacts<br>July 2026</div>
+<input id='search' placeholder='Search...'>
+<div id='list'>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ann Fender &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1124&quot;,&quot;Phone&quot;:&quot;(717) 357-2997&quot;,&quot;Email&quot;:&quot;fendera@comcast.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Ann Fender  — (717) 357-2997</div>
+<div class='line2'>1124 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ann Pape&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1224&quot;,&quot;Phone&quot;:&quot;(402) 320-0774&quot;,&quot;Email&quot;:&quot;aepape@gmail.com&quot;,&quot;OtherName&quot;:&quot;Jerry Pape&quot;,&quot;OtherPhone&quot;:&quot;(402) 201-8708&quot;,&quot;OtherEmail&quot;:&quot;jerrycpape@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Ann Pape — (402) 320-0774</div>
+<div class='line2'>1224 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;April Hinds &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1216&quot;,&quot;Phone&quot;:&quot;(203) 305-7467&quot;,&quot;Email&quot;:&quot;adh1223@icloud.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>April Hinds  — (203) 305-7467</div>
+<div class='line2'>1216 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Arlene Friesen &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1215&quot;,&quot;Phone&quot;:&quot;(952) 484-1531&quot;,&quot;Email&quot;:&quot;friesen9930@aol.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Arlene Friesen  — (952) 484-1531</div>
+<div class='line2'>1215 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Barbara Finney &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1211&quot;,&quot;Phone&quot;:&quot;(904) 669-4554&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Barbara Finney  — (904) 669-4554</div>
+<div class='line2'>1211 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ben Ventura &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1106&quot;,&quot;Phone&quot;:&quot;(212) 595-4289&quot;,&quot;Email&quot;:&quot;romabo84@gmail.com &quot;,&quot;OtherName&quot;:&quot;Rosemarie Borgia &quot;,&quot;OtherPhone&quot;:&quot;(202) 506-0730&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Ben Ventura  — (212) 595-4289</div>
+<div class='line2'>1106 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bill Schwieger &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1140&quot;,&quot;Phone&quot;:&quot;(920) 381-5561&quot;,&quot;Email&quot;:&quot;williamschwieger@yahoo.com &quot;,&quot;OtherName&quot;:&quot;Sharon Peters&quot;,&quot;OtherPhone&quot;:&quot;(214) 923-8435&quot;,&quot;OtherEmail&quot;:&quot;biggs2b@aol.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bill Schwieger  — (920) 381-5561</div>
+<div class='line2'>1140 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bill Sparks&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1206&quot;,&quot;Phone&quot;:&quot;(813) 956-8230&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jeff Shama&quot;,&quot;OtherPhone&quot;:&quot;(813) 505-6511&quot;,&quot;OtherEmail&quot;:&quot;jeffshama@hotmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bill Sparks — (813) 956-8230</div>
+<div class='line2'>1206 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bill Thomas &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2901&quot;,&quot;Phone&quot;:&quot;(630) 347-0291&quot;,&quot;Email&quot;:&quot;jcoffee428@gmail.com &quot;,&quot;OtherName&quot;:&quot;Jess Thomas &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bill Thomas  — (630) 347-0291</div>
+<div class='line2'>2901 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bob Enyeart&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1211&quot;,&quot;Phone&quot;:&quot;(352) 259-4116&quot;,&quot;Email&quot;:&quot;henyeart@comcast.net &quot;,&quot;OtherName&quot;:&quot;Helen Enyeart&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bob Enyeart — (352) 259-4116</div>
+<div class='line2'>1211 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bob Kilkelly &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1217&quot;,&quot;Phone&quot;:&quot;(608) 516-3525&quot;,&quot;Email&quot;:&quot;rkilkelly@gmail.com &quot;,&quot;OtherName&quot;:&quot;Penny Kilkelly  &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bob Kilkelly  — (608) 516-3525</div>
+<div class='line2'>1217 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bonnie Coffee   &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2909&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Charlie Coffee&quot;,&quot;OtherPhone&quot;:&quot;(612) 280-3212&quot;,&quot;OtherEmail&quot;:&quot;bncof@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bonnie Coffee    — </div>
+<div class='line2'>2909 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bonnie Houdek&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2919&quot;,&quot;Phone&quot;:&quot;(352) 753-3926&quot;,&quot;Email&quot;:&quot;blhoudek1@aol.com&quot;,&quot;OtherName&quot;:&quot;James Houdek&quot;,&quot;OtherPhone&quot;:&quot;(630) 370-2773&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bonnie Houdek — (352) 753-3926</div>
+<div class='line2'>2919 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Brian Laskoskie &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1122&quot;,&quot;Phone&quot;:&quot;(407) 310-6300&quot;,&quot;Email&quot;:&quot;blaskofla@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Nancy Keatly&quot;,&quot;OtherPhone&quot;:&quot;(304) 573-6511&quot;,&quot;OtherEmail&quot;:&quot; &quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Brian Laskoskie  — (407) 310-6300</div>
+<div class='line2'>1122 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Brigitte Reichert&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1102&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Guenter Reichert&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-1651&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Brigitte Reichert — </div>
+<div class='line2'>1102 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Bud Clark &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1212&quot;,&quot;Phone&quot;:&quot;(303) 725-0167&quot;,&quot;Email&quot;:&quot;clarkbandc@comcast.net &quot;,&quot;OtherName&quot;:&quot;Cathy Clark &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Bud Clark  — (303) 725-0167</div>
+<div class='line2'>1212 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Carlos Barcelo&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;(787) 717-3094&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Mariana Barcelo&quot;,&quot;OtherPhone&quot;:&quot;(787) 220-2024&quot;,&quot;OtherEmail&quot;:&quot;mbarcelo1103@gmail.com&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
+<div class='line1'>Carlos Barcelo — (787) 717-3094</div>
+<div class='line2'>1221 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Carmen Doyle&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1116&quot;,&quot;Phone&quot;:&quot;(717) 357-0651&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
+<div class='line1'>Carmen Doyle — (717) 357-0651</div>
+<div class='line2'>1116 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Carol Burch&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1222&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Mike Burch&quot;,&quot;OtherPhone&quot;:&quot;(352) 751-0747&quot;,&quot;OtherEmail&quot;:&quot;mikecarolburch@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Carol Burch — </div>
+<div class='line2'>1222 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Carole Broderick &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1130&quot;,&quot;Phone&quot;:&quot;(440) 278-0003&quot;,&quot;Email&quot;:&quot;carolekirchner@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
+<div class='line1'>Carole Broderick  — (440) 278-0003</div>
+<div class='line2'>1130 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Cathy Clark &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1212&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bud Clark &quot;,&quot;OtherPhone&quot;:&quot;(303) 725-0167&quot;,&quot;OtherEmail&quot;:&quot;clarkbandc@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Cathy Clark  — </div>
+<div class='line2'>1212 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Charlie Coffee&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2909&quot;,&quot;Phone&quot;:&quot;(612) 280-3212&quot;,&quot;Email&quot;:&quot;bncof@aol.com &quot;,&quot;OtherName&quot;:&quot;Bonnie Coffee   &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Charlie Coffee — (612) 280-3212</div>
+<div class='line2'>2909 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Charlie Wagonschutz &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1210&quot;,&quot;Phone&quot;:&quot;(517) 202-9718&quot;,&quot;Email&quot;:&quot;crwrkw@aol.com &quot;,&quot;OtherName&quot;:&quot;Robyn Wagonschutz &quot;,&quot;OtherPhone&quot;:&quot;(517) 819-4144&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Charlie Wagonschutz  — (517) 202-9718</div>
+<div class='line2'>1210 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Cheryl Holdefer&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2915&quot;,&quot;Phone&quot;:&quot;(352) 430-4486&quot;,&quot;Email&quot;:&quot;cherylholdefer@gmail.com&quot;,&quot;OtherName&quot;:&quot;Pat Miller&quot;,&quot;OtherPhone&quot;:&quot;(352) 552-4894&quot;,&quot;OtherEmail&quot;:&quot;patm2915@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Cheryl Holdefer — (352) 430-4486</div>
+<div class='line2'>2915 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Cheryl Judge &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1108&quot;,&quot;Phone&quot;:&quot;(813) 285-0716&quot;,&quot;Email&quot;:&quot;kuno1111@icloud.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Cheryl Judge  — (813) 285-0716</div>
+<div class='line2'>1108 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Cheryle Wise&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(303) 907-1012&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Tim Wise&quot;,&quot;OtherPhone&quot;:&quot;(303) 907-1812&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Cheryle Wise — (303) 907-1012</div>
+<div class='line2'>1207 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Chris Parratore&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1118&quot;,&quot;Phone&quot;:&quot;(630) 290-6397&quot;,&quot;Email&quot;:&quot;cparratore@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Chris Parratore — (630) 290-6397</div>
+<div class='line2'>1118 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Cindy Walton &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2917&quot;,&quot;Phone&quot;:&quot;(303) 242-7341&quot;,&quot;Email&quot;:&quot;cindyjo216@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Cindy Walton  — (303) 242-7341</div>
+<div class='line2'>2917 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Connie Kelley&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1126&quot;,&quot;Phone&quot;:&quot;(352) 552-3176&quot;,&quot;Email&quot;:&quot;conniekelley1@mac.com&quot;,&quot;OtherName&quot;:&quot;Larry Kelley &quot;,&quot;OtherPhone&quot;:&quot;(203) 910-0046&quot;,&quot;OtherEmail&quot;:&quot;larrykelley09@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Connie Kelley — (352) 552-3176</div>
+<div class='line2'>1126 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dan Falter &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;(352) 633-8987&quot;,&quot;Email&quot;:&quot;d.h.falter2@gmail.com &quot;,&quot;OtherName&quot;:&quot;Kanna Falter&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Dan Falter  — (352) 633-8987</div>
+<div class='line2'>1213 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dar Settles&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1128&quot;,&quot;Phone&quot;:&quot;(270) 313-5749&quot;,&quot;Email&quot;:&quot;d.settles@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Lisa Mattingly&quot;,&quot;OtherPhone&quot;:&quot;(270) 231-2654&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR RENT&quot;}">
+<div class='line1'>Dar Settles — (270) 313-5749</div>
+<div class='line2'>1128 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dave Koleda&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1219&quot;,&quot;Phone&quot;:&quot;(810) 338-1372&quot;,&quot;Email&quot;:&quot;dkoledam22@gmail.com&quot;,&quot;OtherName&quot;:&quot;Linda Koleda&quot;,&quot;OtherPhone&quot;:&quot;(810) 338-3172&quot;,&quot;OtherEmail&quot;:&quot;lifeisgoodm22@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Dave Koleda — (810) 338-1372</div>
+<div class='line2'>1219 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dave O'Brien&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1104&quot;,&quot;Phone&quot;:&quot;(860) 798-6673&quot;,&quot;Email&quot;:&quot;pawsinnplay@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Dave O'Brien — (860) 798-6673</div>
+<div class='line2'>1104 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;David Galloway&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1113&quot;,&quot;Phone&quot;:&quot;(212) 722-0756&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>David Galloway — (212) 722-0756</div>
+<div class='line2'>1113 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;David Van Drieson&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(340) 514-5892&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Tracy Van Drieson&quot;,&quot;OtherPhone&quot;:&quot;(340) 514-4236&quot;,&quot;OtherEmail&quot;:&quot;tracyjean@live.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>David Van Drieson — (340) 514-5892</div>
+<div class='line2'>1207 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;David Wronski&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1122&quot;,&quot;Phone&quot;:&quot;(321) 505-3556&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>David Wronski — (321) 505-3556</div>
+<div class='line2'>1122 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dawn Cutler&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(218) 393-6349&quot;,&quot;Email&quot;:&quot;dawnreneec2395@gmail.com&quot;,&quot;OtherName&quot;:&quot;Paul Cutler&quot;,&quot;OtherPhone&quot;:&quot;(218) 393-6350&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Dawn Cutler — (218) 393-6349</div>
+<div class='line2'>1208 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dee Butts &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2905&quot;,&quot;Phone&quot;:&quot;(407) 973-8753&quot;,&quot;Email&quot;:&quot;ddbutts@yahoo.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Dee Butts  — (407) 973-8753</div>
+<div class='line2'>2905 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Diane Burkhardt&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1106&quot;,&quot;Phone&quot;:&quot;(484) 264-2927&quot;,&quot;Email&quot;:&quot;gagaparismom6fl@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Diane Burkhardt — (484) 264-2927</div>
+<div class='line2'>1106 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dick Dufresne &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1142&quot;,&quot;Phone&quot;:&quot;(352) 750-4743&quot;,&quot;Email&quot;:&quot;jddufresne@comcast.net &quot;,&quot;OtherName&quot;:&quot;Jolyne Dufresne&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Dick Dufresne  — (352) 750-4743</div>
+<div class='line2'>1142 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Donna Ryan &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1201&quot;,&quot;Phone&quot;:&quot;(717) 968-3210&quot;,&quot;Email&quot;:&quot;dryan4555@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Donna Ryan  — (717) 968-3210</div>
+<div class='line2'>1201 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Donna Williams &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(757) 771-6450&quot;,&quot;Email&quot;:&quot;wdonna695@msn.com   &quot;,&quot;OtherName&quot;:&quot;Terry Williams&quot;,&quot;OtherPhone&quot;:&quot;(757) 284-4137&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Donna Williams  — (757) 771-6450</div>
+<div class='line2'>1208 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Doreen Hartman &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1218&quot;,&quot;Phone&quot;:&quot;(352) 259-0231&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Doreen Hartman  — (352) 259-0231</div>
+<div class='line2'>1218 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Dot Churchill &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1206&quot;,&quot;Phone&quot;:&quot;(207) 712-3868&quot;,&quot;Email&quot;:&quot;dorothychurchill001@comcast.net&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Dot Churchill  — (207) 712-3868</div>
+<div class='line2'>1206 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Edward Terry &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1101&quot;,&quot;Phone&quot;:&quot;(352) 751-3722&quot;,&quot;Email&quot;:&quot;eterry353@gmail.com &quot;,&quot;OtherName&quot;:&quot;Victoria Terry &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Edward Terry  — (352) 751-3722</div>
+<div class='line2'>1101 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ehren Graf&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1203&quot;,&quot;Phone&quot;:&quot;(920) 819-9951&quot;,&quot;Email&quot;:&quot;bing2350@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Jody Graf&quot;,&quot;OtherPhone&quot;:&quot;(920) 750-2233&quot;,&quot;OtherEmail&quot;:&quot;thanks4stoppen@yahoo.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Ehren Graf — (920) 819-9951</div>
+<div class='line2'>1203 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Eileen Sweeney &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(347) 733-2473&quot;,&quot;Email&quot;:&quot;eileenm722@verizon.net &quot;,&quot;OtherName&quot;:&quot;Pat Sweeney&quot;,&quot;OtherPhone&quot;:&quot;(347) 524-7990&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Eileen Sweeney  — (347) 733-2473</div>
+<div class='line2'>1114 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Gail Neblett&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1118&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jim Neblett&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-4522&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Gail Neblett — </div>
+<div class='line2'>1118 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Gail Raber &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(352) 727-3662&quot;,&quot;Email&quot;:&quot;gailraber12@aol.com &quot;,&quot;OtherName&quot;:&quot;Paul Raber&quot;,&quot;OtherPhone&quot;:&quot;(352) 348-1303&quot;,&quot;OtherEmail&quot;:&quot; &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Gail Raber  — (352) 727-3662</div>
+<div class='line2'>1114 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Gary Halladay  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1134&quot;,&quot;Phone&quot;:&quot;(616) 262-8989&quot;,&quot;Email&quot;:&quot;suehalladay5@gmail.com &quot;,&quot;OtherName&quot;:&quot;Sue Halladay&quot;,&quot;OtherPhone&quot;:&quot;(616) 723-1234&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Gary Halladay   — (616) 262-8989</div>
+<div class='line2'>1134 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Gary Kuhlmey&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1112&quot;,&quot;Phone&quot;:&quot;(352) 750-4832&quot;,&quot;Email&quot;:&quot;anngaryk@bellsouth.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Gary Kuhlmey — (352) 750-4832</div>
+<div class='line2'>1112 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Grace Doran &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1212&quot;,&quot;Phone&quot;:&quot;(513) 315-7142&quot;,&quot;Email&quot;:&quot;gdoran8680@aol.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Grace Doran  — (513) 315-7142</div>
+<div class='line2'>1212 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Guenter Reichert&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1102&quot;,&quot;Phone&quot;:&quot;(352) 259-1651&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Brigitte Reichert&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Guenter Reichert — (352) 259-1651</div>
+<div class='line2'>1102 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Harry Black &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1110&quot;,&quot;Phone&quot;:&quot;(352) 259-4749&quot;,&quot;Email&quot;:&quot;harryblack1@sbcglobal.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Harry Black  — (352) 259-4749</div>
+<div class='line2'>1110 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Heidi Barcia  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1220&quot;,&quot;Phone&quot;:&quot;(775) 233-0174&quot;,&quot;Email&quot;:&quot;heididragsten@gmail.com &quot;,&quot;OtherName&quot;:&quot;Kathy Haugan&quot;,&quot;OtherPhone&quot;:&quot;(605) 695-0053&quot;,&quot;OtherEmail&quot;:&quot;khaugan80@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Heidi Barcia   — (775) 233-0174</div>
+<div class='line2'>1220 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Helen Enyeart&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1211&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bob Enyeart&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-4116&quot;,&quot;OtherEmail&quot;:&quot;henyeart@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Helen Enyeart — </div>
+<div class='line2'>1211 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Henry Walbesser &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1124&quot;,&quot;Phone&quot;:&quot;(703) 967-8738&quot;,&quot;Email&quot;:&quot;mindylrw@gmail.com &quot;,&quot;OtherName&quot;:&quot;Mindy Walbesser&quot;,&quot;OtherPhone&quot;:&quot;(703) 216-6982&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Henry Walbesser  — (703) 967-8738</div>
+<div class='line2'>1124 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Hugh Orin&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1125&quot;,&quot;Phone&quot;:&quot;(352) 409-6735&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Kathy Dermody&quot;,&quot;OtherPhone&quot;:&quot;(352) 753-3798&quot;,&quot;OtherEmail&quot;:&quot;kathydermody@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Hugh Orin — (352) 409-6735</div>
+<div class='line2'>1125 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;James Houdek&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2919&quot;,&quot;Phone&quot;:&quot;(630) 370-2773&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bonnie Houdek&quot;,&quot;OtherPhone&quot;:&quot;(352) 753-3926&quot;,&quot;OtherEmail&quot;:&quot;blhoudek1@aol.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>James Houdek — (630) 370-2773</div>
+<div class='line2'>2919 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;James Paulk&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2911&quot;,&quot;Phone&quot;:&quot;(248) 345-2012&quot;,&quot;Email&quot;:&quot;thepaulks@sbcglobal.net&quot;,&quot;OtherName&quot;:&quot;Laura Paulk&quot;,&quot;OtherPhone&quot;:&quot;(248) 231-9640&quot;,&quot;OtherEmail&quot;:&quot;laurapaulk@hotmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>James Paulk — (248) 345-2012</div>
+<div class='line2'>2911 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jan Cope &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1216&quot;,&quot;Phone&quot;:&quot;(618) 402-2389&quot;,&quot;Email&quot;:&quot;jantoboat@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jan Cope  — (618) 402-2389</div>
+<div class='line2'>1216 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Janette Vail&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1110&quot;,&quot;Phone&quot;:&quot;(352) 598-1738&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Thomas Vail&quot;,&quot;OtherPhone&quot;:&quot;(352) 751-0605&quot;,&quot;OtherEmail&quot;:&quot;tomjanette@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Janette Vail — (352) 598-1738</div>
+<div class='line2'>1110 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;JB Bergeron&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1123&quot;,&quot;Phone&quot;:&quot;(619) 861-4166&quot;,&quot;Email&quot;:&quot;jbees94@hotmail.com &quot;,&quot;OtherName&quot;:&quot;Ric Osborne&quot;,&quot;OtherPhone&quot;:&quot;(619) 756-0431&quot;,&quot;OtherEmail&quot;:&quot;shotzy55@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>JB Bergeron — (619) 861-4166</div>
+<div class='line2'>1123 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jean Barros&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1119&quot;,&quot;Phone&quot;:&quot;(860) 759-2883&quot;,&quot;Email&quot;:&quot;jbarross@svcglobal.net&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jean Barros — (860) 759-2883</div>
+<div class='line2'>1119 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jean Hanham&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2913&quot;,&quot;Phone&quot;:&quot;(201) 953-0252&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Ron LaDucer&quot;,&quot;OtherPhone&quot;:&quot;(201) 552-6144&quot;,&quot;OtherEmail&quot;:&quot;ronjean6159@gmail.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Jean Hanham — (201) 953-0252</div>
+<div class='line2'>2913 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jean Olivea&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1204&quot;,&quot;Phone&quot;:&quot;(561) 699-4581&quot;,&quot;Email&quot;:&quot;jeanolivea1943@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jean Olivea — (561) 699-4581</div>
+<div class='line2'>1204 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jeff Shama&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1206&quot;,&quot;Phone&quot;:&quot;(813) 505-6511&quot;,&quot;Email&quot;:&quot;jeffshama@hotmail.com&quot;,&quot;OtherName&quot;:&quot;Bill Sparks&quot;,&quot;OtherPhone&quot;:&quot;(813) 956-8230&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jeff Shama — (813) 505-6511</div>
+<div class='line2'>1206 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jerome Bence&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1102&quot;,&quot;Phone&quot;:&quot;(425) 641-5534&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Jerome Bence — (425) 641-5534</div>
+<div class='line2'>1102 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jerry Dorfman&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1135&quot;,&quot;Phone&quot;:&quot;(954) 588-2693&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Judy Dorfman&quot;,&quot;OtherPhone&quot;:&quot;(954) 294-2904&quot;,&quot;OtherEmail&quot;:&quot;dorfmanje@bellsouth.net&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jerry Dorfman — (954) 588-2693</div>
+<div class='line2'>1135 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jerry Nugent &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;(352) 753-5215&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Patricia Nugent &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jerry Nugent  — (352) 753-5215</div>
+<div class='line2'>1214 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jerry Pape&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1224&quot;,&quot;Phone&quot;:&quot;(402) 201-8708&quot;,&quot;Email&quot;:&quot;jerrycpape@gmail.com&quot;,&quot;OtherName&quot;:&quot;Ann Pape&quot;,&quot;OtherPhone&quot;:&quot;(402) 320-0774&quot;,&quot;OtherEmail&quot;:&quot;aepape@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jerry Pape — (402) 201-8708</div>
+<div class='line2'>1224 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jess Thomas &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2901&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bill Thomas &quot;,&quot;OtherPhone&quot;:&quot;(630) 347-0291&quot;,&quot;OtherEmail&quot;:&quot;jcoffee428@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jess Thomas  — </div>
+<div class='line2'>2901 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jim & Linda Molnar&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1204&quot;,&quot;Phone&quot;:&quot;(979) 446-5069&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Rebecca Molnar&quot;,&quot;OtherPhone&quot;:&quot;(832) 703-5315&quot;,&quot;OtherEmail&quot;:&quot;rebmolnar@yahoo.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jim & Linda Molnar — (979) 446-5069</div>
+<div class='line2'>1204 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jim Neblett&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1118&quot;,&quot;Phone&quot;:&quot;(352) 259-4522&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Gail Neblett&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jim Neblett — (352) 259-4522</div>
+<div class='line2'>1118 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jim Storms &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;(614) 886-3007&quot;,&quot;Email&quot;:&quot;jwstorms2@gmail.com &quot;,&quot;OtherName&quot;:&quot;Lynne Storms &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jim Storms  — (614) 886-3007</div>
+<div class='line2'>1213 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Joan Nicholas  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1132&quot;,&quot;Phone&quot;:&quot;(715) 864-9340&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;John Nicholas &quot;,&quot;OtherPhone&quot;:&quot;(352) 874-7005&quot;,&quot;OtherEmail&quot;:&quot;joan.nicholas@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Joan Nicholas   — (715) 864-9340</div>
+<div class='line2'>1132 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jody Graf&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1203&quot;,&quot;Phone&quot;:&quot;(920) 750-2233&quot;,&quot;Email&quot;:&quot;thanks4stoppen@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Ehren Graf&quot;,&quot;OtherPhone&quot;:&quot;(920) 819-9951&quot;,&quot;OtherEmail&quot;:&quot;bing2350@yahoo.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Jody Graf — (920) 750-2233</div>
+<div class='line2'>1203 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Joe Apple&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1111&quot;,&quot;Phone&quot;:&quot;(814) 937-2468&quot;,&quot;Email&quot;:&quot;rlzeigler@verizon.net&quot;,&quot;OtherName&quot;:&quot;Robin Apple&quot;,&quot;OtherPhone&quot;:&quot;(814) 312-5563&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Joe Apple — (814) 937-2468</div>
+<div class='line2'>1111 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;John Doyle &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1209&quot;,&quot;Phone&quot;:&quot;(404) 461-9978&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Sylvia Doyle &quot;,&quot;OtherPhone&quot;:&quot;(608) 436-6325&quot;,&quot;OtherEmail&quot;:&quot;sylvia.doyle@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>John Doyle  — (404) 461-9978</div>
+<div class='line2'>1209 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;John Holze&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1104&quot;,&quot;Phone&quot;:&quot;(516) 526-4018&quot;,&quot;Email&quot;:&quot;johnholze@yahoo.com &quot;,&quot;OtherName&quot;:&quot;Lenora Holze&quot;,&quot;OtherPhone&quot;:&quot;(516) 503-0086&quot;,&quot;OtherEmail&quot;:&quot;lenoraholze@yahoo.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>John Holze — (516) 526-4018</div>
+<div class='line2'>1104 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;John McDonald&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1136&quot;,&quot;Phone&quot;:&quot;(218) 821-1732&quot;,&quot;Email&quot;:&quot;64jmcdonald@gmail.com&quot;,&quot;OtherName&quot;:&quot;Kristil McDonald&quot;,&quot;OtherPhone&quot;:&quot;(218) 821-4297&quot;,&quot;OtherEmail&quot;:&quot;mcdonaldkristil54@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>John McDonald — (218) 821-1732</div>
+<div class='line2'>1136 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;John Nicholas &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1132&quot;,&quot;Phone&quot;:&quot;(352) 874-7005&quot;,&quot;Email&quot;:&quot;joan.nicholas@gmail.com &quot;,&quot;OtherName&quot;:&quot;Joan Nicholas  &quot;,&quot;OtherPhone&quot;:&quot;(715) 864-9340&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>John Nicholas  — (352) 874-7005</div>
+<div class='line2'>1132 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Jolyne Dufresne&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1142&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dick Dufresne &quot;,&quot;OtherPhone&quot;:&quot;(352) 750-4743&quot;,&quot;OtherEmail&quot;:&quot;jddufresne@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Jolyne Dufresne — </div>
+<div class='line2'>1142 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Josie Pambo &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1202&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Manny Pambo &quot;,&quot;OtherPhone&quot;:&quot;(817) 821-0593&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Josie Pambo  — </div>
+<div class='line2'>1202 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Joy Allocca&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1115&quot;,&quot;Phone&quot;:&quot;(917) 971-3900&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Ralph Allocca&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Joy Allocca — (917) 971-3900</div>
+<div class='line2'>1115 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Juanita Whitley &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1203&quot;,&quot;Phone&quot;:&quot;(352) 259-9403&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Juanita Whitley  — (352) 259-9403</div>
+<div class='line2'>1203 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Judy Dorfman&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1135&quot;,&quot;Phone&quot;:&quot;(954) 294-2904&quot;,&quot;Email&quot;:&quot;dorfmanje@bellsouth.net&quot;,&quot;OtherName&quot;:&quot;Jerry Dorfman&quot;,&quot;OtherPhone&quot;:&quot;(954) 588-2693&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Judy Dorfman — (954) 294-2904</div>
+<div class='line2'>1135 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Judy Shepherd &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1109&quot;,&quot;Phone&quot;:&quot;(850) 428-0633&quot;,&quot;Email&quot;:&quot;judyshep0633@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Judy Shepherd  — (850) 428-0633</div>
+<div class='line2'>1109 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Julie Collins &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1205&quot;,&quot;Phone&quot;:&quot;(352) 430-7465&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Julie Collins  — (352) 430-7465</div>
+<div class='line2'>1205 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Kanna Falter&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dan Falter &quot;,&quot;OtherPhone&quot;:&quot;(352) 633-8987&quot;,&quot;OtherEmail&quot;:&quot;d.h.falter2@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Kanna Falter — </div>
+<div class='line2'>1213 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Kathy Dermody&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1125&quot;,&quot;Phone&quot;:&quot;(352) 753-3798&quot;,&quot;Email&quot;:&quot;kathydermody@yahoo.com &quot;,&quot;OtherName&quot;:&quot;Hugh Orin&quot;,&quot;OtherPhone&quot;:&quot;(352) 409-6735&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Kathy Dermody — (352) 753-3798</div>
+<div class='line2'>1125 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Kathy Haugan&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1220&quot;,&quot;Phone&quot;:&quot;(605) 695-0053&quot;,&quot;Email&quot;:&quot;khaugan80@gmail.com&quot;,&quot;OtherName&quot;:&quot;Heidi Barcia  &quot;,&quot;OtherPhone&quot;:&quot;(775) 233-0174&quot;,&quot;OtherEmail&quot;:&quot;heididragsten@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Kathy Haugan — (605) 695-0053</div>
+<div class='line2'>1220 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Kimberly Macintosh&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1210&quot;,&quot;Phone&quot;:&quot;(401) 283-0043&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Kimberly Macintosh — (401) 283-0043</div>
+<div class='line2'>1210 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Kirby Bowman &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1103&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Patty Bowman &quot;,&quot;OtherPhone&quot;:&quot;(214) 505-7387&quot;,&quot;OtherEmail&quot;:&quot;bowmanpa@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Kirby Bowman  — </div>
+<div class='line2'>1103 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Kris Burr&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Steve Burr &quot;,&quot;OtherPhone&quot;:&quot;(641) 485-2923&quot;,&quot;OtherEmail&quot;:&quot;kris52339@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Kris Burr — </div>
+<div class='line2'>1221 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Kristil McDonald&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1136&quot;,&quot;Phone&quot;:&quot;(218) 821-4297&quot;,&quot;Email&quot;:&quot;mcdonaldkristil54@gmail.com&quot;,&quot;OtherName&quot;:&quot;John McDonald&quot;,&quot;OtherPhone&quot;:&quot;(218) 821-1732&quot;,&quot;OtherEmail&quot;:&quot;64jmcdonald@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Kristil McDonald — (218) 821-4297</div>
+<div class='line2'>1136 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Larry Conway &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2903&quot;,&quot;Phone&quot;:&quot;(631) 875-2868&quot;,&quot;Email&quot;:&quot;conway615@aol.com &quot;,&quot;OtherName&quot;:&quot;Sue Conway&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Larry Conway  — (631) 875-2868</div>
+<div class='line2'>2903 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Larry Henke&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1202&quot;,&quot;Phone&quot;:&quot;(352) 467-4320&quot;,&quot;Email&quot;:&quot;larryron34@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Larry Henke — (352) 467-4320</div>
+<div class='line2'>1202 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Larry Kelley &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1126&quot;,&quot;Phone&quot;:&quot;(203) 910-0046&quot;,&quot;Email&quot;:&quot;larrykelley09@gmail.com &quot;,&quot;OtherName&quot;:&quot;Connie Kelley&quot;,&quot;OtherPhone&quot;:&quot;(352) 552-3176&quot;,&quot;OtherEmail&quot;:&quot;conniekelley1@mac.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Larry Kelley  — (203) 910-0046</div>
+<div class='line2'>1126 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Laura Paulk&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2911&quot;,&quot;Phone&quot;:&quot;(248) 231-9640&quot;,&quot;Email&quot;:&quot;laurapaulk@hotmail.com&quot;,&quot;OtherName&quot;:&quot;James Paulk&quot;,&quot;OtherPhone&quot;:&quot;(248) 345-2012&quot;,&quot;OtherEmail&quot;:&quot;thepaulks@sbcglobal.net&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Laura Paulk — (248) 231-9640</div>
+<div class='line2'>2911 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Laura Walden &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1120&quot;,&quot;Phone&quot;:&quot;(813) 228-0408&quot;,&quot;Email&quot;:&quot;sports.features@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Laura Walden  — (813) 228-0408</div>
+<div class='line2'>1120 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Lenora Holze&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1104&quot;,&quot;Phone&quot;:&quot;(516) 503-0086&quot;,&quot;Email&quot;:&quot;lenoraholze@yahoo.com&quot;,&quot;OtherName&quot;:&quot;John Holze&quot;,&quot;OtherPhone&quot;:&quot;(516) 526-4018&quot;,&quot;OtherEmail&quot;:&quot;johnholze@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Lenora Holze — (516) 503-0086</div>
+<div class='line2'>1104 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Linda Beatty &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1215&quot;,&quot;Phone&quot;:&quot;(480) 540-0742&quot;,&quot;Email&quot;:&quot;lsbeatty@hotmail.com &quot;,&quot;OtherName&quot;:&quot;Rich Kloc&quot;,&quot;OtherPhone&quot;:&quot;(480) 540-0743&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Linda Beatty  — (480) 540-0742</div>
+<div class='line2'>1215 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Linda Giardino &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;(845) 642-5113&quot;,&quot;Email&quot;:&quot;lindagiardino@hotmail.com &quot;,&quot;OtherName&quot;:&quot;Ralph Barrea&quot;,&quot;OtherPhone&quot;:&quot;(914) 708-7318&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Linda Giardino  — (845) 642-5113</div>
+<div class='line2'>1214 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Linda Koleda&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1219&quot;,&quot;Phone&quot;:&quot;(810) 338-3172&quot;,&quot;Email&quot;:&quot;lifeisgoodm22@gmail.com&quot;,&quot;OtherName&quot;:&quot;Dave Koleda&quot;,&quot;OtherPhone&quot;:&quot;(810) 338-1372&quot;,&quot;OtherEmail&quot;:&quot;dkoledam22@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Linda Koleda — (810) 338-3172</div>
+<div class='line2'>1219 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Lisa Mattingly&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1128&quot;,&quot;Phone&quot;:&quot;(270) 231-2654&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dar Settles&quot;,&quot;OtherPhone&quot;:&quot;(270) 313-5749&quot;,&quot;OtherEmail&quot;:&quot;d.settles@yahoo.com&quot;,&quot;PType&quot;:&quot;FOR RENT&quot;}">
+<div class='line1'>Lisa Mattingly — (270) 231-2654</div>
+<div class='line2'>1128 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Lori Smith &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1107&quot;,&quot;Phone&quot;:&quot;(913) 244-9320&quot;,&quot;Email&quot;:&quot;slj12721@yahoo.com &quot;,&quot;OtherName&quot;:&quot;W.Q Smith&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-2322&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Lori Smith  — (913) 244-9320</div>
+<div class='line2'>1107 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Lou Manosalva&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1205&quot;,&quot;Phone&quot;:&quot;(352) 444-9942&quot;,&quot;Email&quot;:&quot;bogomano66@comcast.net &quot;,&quot;OtherName&quot;:&quot;Marina Manosalva &quot;,&quot;OtherPhone&quot;:&quot;(352) 603-1592&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Lou Manosalva — (352) 444-9942</div>
+<div class='line2'>1205 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Lynne Storms &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jim Storms &quot;,&quot;OtherPhone&quot;:&quot;(614) 886-3007&quot;,&quot;OtherEmail&quot;:&quot;jwstorms2@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Lynne Storms  — </div>
+<div class='line2'>1213 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Manny Pambo &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1202&quot;,&quot;Phone&quot;:&quot;(817) 821-0593&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Josie Pambo &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Manny Pambo  — (817) 821-0593</div>
+<div class='line2'>1202 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Mariana Barcelo&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;(787) 220-2024&quot;,&quot;Email&quot;:&quot;mbarcelo1103@gmail.com&quot;,&quot;OtherName&quot;:&quot;Carlos Barcelo&quot;,&quot;OtherPhone&quot;:&quot;(787) 717-3094&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
+<div class='line1'>Mariana Barcelo — (787) 220-2024</div>
+<div class='line2'>1221 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Marina Manosalva &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1205&quot;,&quot;Phone&quot;:&quot;(352) 603-1592&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Lou Manosalva&quot;,&quot;OtherPhone&quot;:&quot;(352) 444-9942&quot;,&quot;OtherEmail&quot;:&quot;bogomano66@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Marina Manosalva  — (352) 603-1592</div>
+<div class='line2'>1205 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Mario Percopo&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1105&quot;,&quot;Phone&quot;:&quot;(407) 221-1263&quot;,&quot;Email&quot;:&quot;mariopercopo@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Mario Percopo — (407) 221-1263</div>
+<div class='line2'>1105 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Michael Harris &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2907&quot;,&quot;Phone&quot;:&quot;(352) 205-1616&quot;,&quot;Email&quot;:&quot;sky470722@aol.com &quot;,&quot;OtherName&quot;:&quot;Sandy Harris &quot;,&quot;OtherPhone&quot;:&quot;(407) 797-3814&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Michael Harris  — (352) 205-1616</div>
+<div class='line2'>2907 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Mike Burch&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1222&quot;,&quot;Phone&quot;:&quot;(352) 751-0747&quot;,&quot;Email&quot;:&quot;mikecarolburch@gmail.com &quot;,&quot;OtherName&quot;:&quot;Carol Burch&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Mike Burch — (352) 751-0747</div>
+<div class='line2'>1222 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Mindy Walbesser&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1124&quot;,&quot;Phone&quot;:&quot;(703) 216-6982&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Henry Walbesser &quot;,&quot;OtherPhone&quot;:&quot;(703) 967-8738&quot;,&quot;OtherEmail&quot;:&quot;mindylrw@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Mindy Walbesser — (703) 216-6982</div>
+<div class='line2'>1124 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Muriel Mastrianni&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1120&quot;,&quot;Phone&quot;:&quot;(860) 384-5271&quot;,&quot;Email&quot;:&quot;murielmastrianni@icloud.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Muriel Mastrianni — (860) 384-5271</div>
+<div class='line2'>1120 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Murray Schmelzer&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1139&quot;,&quot;Phone&quot;:&quot;(614) 206-1165&quot;,&quot;Email&quot;:&quot;hipmurray@gmail.com&quot;,&quot;OtherName&quot;:&quot;Sue Schmelzer&quot;,&quot;OtherPhone&quot;:&quot;(614) 206-1195&quot;,&quot;OtherEmail&quot;:&quot;ssmellsir@aol.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Murray Schmelzer — (614) 206-1165</div>
+<div class='line2'>1139 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Nancy Davis &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1123&quot;,&quot;Phone&quot;:&quot;(317) 440-0238&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Nancy Davis  — (317) 440-0238</div>
+<div class='line2'>1123 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Nancy Hankins &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1112&quot;,&quot;Phone&quot;:&quot;(352) 250-7868&quot;,&quot;Email&quot;:&quot;hankinswj@frontiernet.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Nancy Hankins  — (352) 250-7868</div>
+<div class='line2'>1112 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Nancy Keatly&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1122&quot;,&quot;Phone&quot;:&quot;(304) 573-6511&quot;,&quot;Email&quot;:&quot; &quot;,&quot;OtherName&quot;:&quot;Brian Laskoskie &quot;,&quot;OtherPhone&quot;:&quot;(407) 310-6300&quot;,&quot;OtherEmail&quot;:&quot;blaskofla@yahoo.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Nancy Keatly — (304) 573-6511</div>
+<div class='line2'>1122 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Nancy Marchant &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1121&quot;,&quot;Phone&quot;:&quot;(352) 283-7631&quot;,&quot;Email&quot;:&quot;nancymarchant@me.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Nancy Marchant  — (352) 283-7631</div>
+<div class='line2'>1121 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Natalie Spiegle&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1133&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Steve Spiegle&quot;,&quot;OtherPhone&quot;:&quot;(352) 775-6870&quot;,&quot;OtherEmail&quot;:&quot;nataliestephenspiegle@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Natalie Spiegle — </div>
+<div class='line2'>1133 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Pam Vitko   &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1219&quot;,&quot;Phone&quot;:&quot;(203) 209-1062&quot;,&quot;Email&quot;:&quot;dappledogs@hotmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Pam Vitko    — (203) 209-1062</div>
+<div class='line2'>1219 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Pat Miller&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2915&quot;,&quot;Phone&quot;:&quot;(352) 552-4894&quot;,&quot;Email&quot;:&quot;patm2915@gmail.com&quot;,&quot;OtherName&quot;:&quot;Cheryl Holdefer&quot;,&quot;OtherPhone&quot;:&quot;(352) 430-4486&quot;,&quot;OtherEmail&quot;:&quot;cherylholdefer@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Pat Miller — (352) 552-4894</div>
+<div class='line2'>2915 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Pat Sweeney&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(347) 524-7990&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Eileen Sweeney &quot;,&quot;OtherPhone&quot;:&quot;(347) 733-2473&quot;,&quot;OtherEmail&quot;:&quot;eileenm722@verizon.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Pat Sweeney — (347) 524-7990</div>
+<div class='line2'>1114 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Patricia Nugent &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jerry Nugent &quot;,&quot;OtherPhone&quot;:&quot;(352) 753-5215&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Patricia Nugent  — </div>
+<div class='line2'>1214 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Patti Carlson &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1108&quot;,&quot;Phone&quot;:&quot;(203) 537-0581&quot;,&quot;Email&quot;:&quot;plc1810@att.net &quot;,&quot;OtherName&quot;:&quot;Richard Carlson &quot;,&quot;OtherPhone&quot;:&quot;(203) 537-4723&quot;,&quot;OtherEmail&quot;:&quot;carlson.richard@att.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Patti Carlson  — (203) 537-0581</div>
+<div class='line2'>1108 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Patty Bowman &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1103&quot;,&quot;Phone&quot;:&quot;(214) 505-7387&quot;,&quot;Email&quot;:&quot;bowmanpa@aol.com &quot;,&quot;OtherName&quot;:&quot;Kirby Bowman &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Patty Bowman  — (214) 505-7387</div>
+<div class='line2'>1103 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Patty Talbott&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1131&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Tom Talbott&quot;,&quot;OtherPhone&quot;:&quot;(352) 561-4952&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Patty Talbott — </div>
+<div class='line2'>1131 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Paul Cutler&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(218) 393-6350&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dawn Cutler&quot;,&quot;OtherPhone&quot;:&quot;(218) 393-6349&quot;,&quot;OtherEmail&quot;:&quot;dawnreneec2395@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Paul Cutler — (218) 393-6350</div>
+<div class='line2'>1208 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Paul Raber&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(352) 348-1303&quot;,&quot;Email&quot;:&quot; &quot;,&quot;OtherName&quot;:&quot;Gail Raber &quot;,&quot;OtherPhone&quot;:&quot;(352) 727-3662&quot;,&quot;OtherEmail&quot;:&quot;gailraber12@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Paul Raber — (352) 348-1303</div>
+<div class='line2'>1114 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Paula Griego&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1117&quot;,&quot;Phone&quot;:&quot;(303) 596-4669&quot;,&quot;Email&quot;:&quot;p.e.griego@msn.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Paula Griego — (303) 596-4669</div>
+<div class='line2'>1117 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Penny Kilkelly  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1217&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bob Kilkelly &quot;,&quot;OtherPhone&quot;:&quot;(608) 516-3525&quot;,&quot;OtherEmail&quot;:&quot;rkilkelly@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Penny Kilkelly   — </div>
+<div class='line2'>1217 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Peter Schmitz&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1121&quot;,&quot;Phone&quot;:&quot;(239) 936-5810&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Peter Schmitz — (239) 936-5810</div>
+<div class='line2'>1121 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ralph Allocca&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1115&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Joy Allocca&quot;,&quot;OtherPhone&quot;:&quot;(917) 971-3900&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Ralph Allocca — </div>
+<div class='line2'>1115 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ralph Barrea&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;(914) 708-7318&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Linda Giardino &quot;,&quot;OtherPhone&quot;:&quot;(845) 642-5113&quot;,&quot;OtherEmail&quot;:&quot;lindagiardino@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Ralph Barrea — (914) 708-7318</div>
+<div class='line2'>1214 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Rebecca Molnar&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1204&quot;,&quot;Phone&quot;:&quot;(832) 703-5315&quot;,&quot;Email&quot;:&quot;rebmolnar@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Jim & Linda Molnar&quot;,&quot;OtherPhone&quot;:&quot;(979) 446-5069&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Rebecca Molnar — (832) 703-5315</div>
+<div class='line2'>1204 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Renee Beck &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1127&quot;,&quot;Phone&quot;:&quot;(352) 661-4173&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Renee Beck  — (352) 661-4173</div>
+<div class='line2'>1127 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ric Osborne&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1123&quot;,&quot;Phone&quot;:&quot;(619) 756-0431&quot;,&quot;Email&quot;:&quot;shotzy55@hotmail.com &quot;,&quot;OtherName&quot;:&quot;JB Bergeron&quot;,&quot;OtherPhone&quot;:&quot;(619) 861-4166&quot;,&quot;OtherEmail&quot;:&quot;jbees94@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Ric Osborne — (619) 756-0431</div>
+<div class='line2'>1123 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Rich Kloc&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1215&quot;,&quot;Phone&quot;:&quot;(480) 540-0743&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Linda Beatty &quot;,&quot;OtherPhone&quot;:&quot;(480) 540-0742&quot;,&quot;OtherEmail&quot;:&quot;lsbeatty@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Rich Kloc — (480) 540-0743</div>
+<div class='line2'>1215 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Richard Carlson &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1108&quot;,&quot;Phone&quot;:&quot;(203) 537-4723&quot;,&quot;Email&quot;:&quot;carlson.richard@att.net &quot;,&quot;OtherName&quot;:&quot;Patti Carlson &quot;,&quot;OtherPhone&quot;:&quot;(203) 537-0581&quot;,&quot;OtherEmail&quot;:&quot;plc1810@att.net &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Richard Carlson  — (203) 537-4723</div>
+<div class='line2'>1108 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Rick Sollman&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1138&quot;,&quot;Phone&quot;:&quot;(352) 638-7116&quot;,&quot;Email&quot;:&quot;rick.sollman@yahoo.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Rick Sollman — (352) 638-7116</div>
+<div class='line2'>1138 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Robin Apple&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1111&quot;,&quot;Phone&quot;:&quot;(814) 312-5563&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Joe Apple&quot;,&quot;OtherPhone&quot;:&quot;(814) 937-2468&quot;,&quot;OtherEmail&quot;:&quot;rlzeigler@verizon.net&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Robin Apple — (814) 312-5563</div>
+<div class='line2'>1111 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Robyn Wagonschutz &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1210&quot;,&quot;Phone&quot;:&quot;(517) 819-4144&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Charlie Wagonschutz &quot;,&quot;OtherPhone&quot;:&quot;(517) 202-9718&quot;,&quot;OtherEmail&quot;:&quot;crwrkw@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Robyn Wagonschutz  — (517) 819-4144</div>
+<div class='line2'>1210 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ron LaDucer&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2913&quot;,&quot;Phone&quot;:&quot;(201) 552-6144&quot;,&quot;Email&quot;:&quot;ronjean6159@gmail.com&quot;,&quot;OtherName&quot;:&quot;Jean Hanham&quot;,&quot;OtherPhone&quot;:&quot;(201) 953-0252&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Ron LaDucer — (201) 552-6144</div>
+<div class='line2'>2913 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Roseann Fortier  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1224&quot;,&quot;Phone&quot;:&quot;(352) 350-6050&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Roseann Fortier   — (352) 350-6050</div>
+<div class='line2'>1224 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Rosemarie Borgia &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1106&quot;,&quot;Phone&quot;:&quot;(202) 506-0730&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Ben Ventura &quot;,&quot;OtherPhone&quot;:&quot;(212) 595-4289&quot;,&quot;OtherEmail&quot;:&quot;romabo84@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Rosemarie Borgia  — (202) 506-0730</div>
+<div class='line2'>1106 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Ruth Burkhardt &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1116&quot;,&quot;Phone&quot;:&quot;(610) 554-7631&quot;,&quot;Email&quot;:&quot;ruthburkhardt@comcast.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Ruth Burkhardt  — (610) 554-7631</div>
+<div class='line2'>1116 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Sandy Harris &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2907&quot;,&quot;Phone&quot;:&quot;(407) 797-3814&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Michael Harris &quot;,&quot;OtherPhone&quot;:&quot;(352) 205-1616&quot;,&quot;OtherEmail&quot;:&quot;sky470722@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Sandy Harris  — (407) 797-3814</div>
+<div class='line2'>2907 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Senthipia Nguyen&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1117&quot;,&quot;Phone&quot;:&quot;(352) 751-0487&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
+<div class='line1'>Senthipia Nguyen — (352) 751-0487</div>
+<div class='line2'>1117 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Sharon Peters&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1140&quot;,&quot;Phone&quot;:&quot;(214) 923-8435&quot;,&quot;Email&quot;:&quot;biggs2b@aol.com&quot;,&quot;OtherName&quot;:&quot;Bill Schwieger &quot;,&quot;OtherPhone&quot;:&quot;(920) 381-5561&quot;,&quot;OtherEmail&quot;:&quot;williamschwieger@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Sharon Peters — (214) 923-8435</div>
+<div class='line2'>1140 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Steve Burr &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;(641) 485-2923&quot;,&quot;Email&quot;:&quot;kris52339@gmail.com &quot;,&quot;OtherName&quot;:&quot;Kris Burr&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Steve Burr  — (641) 485-2923</div>
+<div class='line2'>1221 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Steve Spiegle&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1133&quot;,&quot;Phone&quot;:&quot;(352) 775-6870&quot;,&quot;Email&quot;:&quot;nataliestephenspiegle@comcast.net &quot;,&quot;OtherName&quot;:&quot;Natalie Spiegle&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Steve Spiegle — (352) 775-6870</div>
+<div class='line2'>1133 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Sue Conway&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2903&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Larry Conway &quot;,&quot;OtherPhone&quot;:&quot;(631) 875-2868&quot;,&quot;OtherEmail&quot;:&quot;conway615@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Sue Conway — </div>
+<div class='line2'>2903 Panchos Way</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Sue Halladay&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1134&quot;,&quot;Phone&quot;:&quot;(616) 723-1234&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Gary Halladay  &quot;,&quot;OtherPhone&quot;:&quot;(616) 262-8989&quot;,&quot;OtherEmail&quot;:&quot;suehalladay5@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Sue Halladay — (616) 723-1234</div>
+<div class='line2'>1134 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Sue Schmelzer&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1139&quot;,&quot;Phone&quot;:&quot;(614) 206-1195&quot;,&quot;Email&quot;:&quot;ssmellsir@aol.com&quot;,&quot;OtherName&quot;:&quot;Murray Schmelzer&quot;,&quot;OtherPhone&quot;:&quot;(614) 206-1165&quot;,&quot;OtherEmail&quot;:&quot;hipmurray@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Sue Schmelzer — (614) 206-1195</div>
+<div class='line2'>1139 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Sylvia Doyle &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1209&quot;,&quot;Phone&quot;:&quot;(608) 436-6325&quot;,&quot;Email&quot;:&quot;sylvia.doyle@gmail.com &quot;,&quot;OtherName&quot;:&quot;John Doyle &quot;,&quot;OtherPhone&quot;:&quot;(404) 461-9978&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Sylvia Doyle  — (608) 436-6325</div>
+<div class='line2'>1209 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Terry Williams&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(757) 284-4137&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Donna Williams &quot;,&quot;OtherPhone&quot;:&quot;(757) 771-6450&quot;,&quot;OtherEmail&quot;:&quot;wdonna695@msn.com   &quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
+<div class='line1'>Terry Williams — (757) 284-4137</div>
+<div class='line2'>1208 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Thomas Vail&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1110&quot;,&quot;Phone&quot;:&quot;(352) 751-0605&quot;,&quot;Email&quot;:&quot;tomjanette@gmail.com &quot;,&quot;OtherName&quot;:&quot;Janette Vail&quot;,&quot;OtherPhone&quot;:&quot;(352) 598-1738&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Thomas Vail — (352) 751-0605</div>
+<div class='line2'>1110 Liendo Lane</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Tim Wise&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(303) 907-1812&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Cheryle Wise&quot;,&quot;OtherPhone&quot;:&quot;(303) 907-1012&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Tim Wise — (303) 907-1812</div>
+<div class='line2'>1207 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Tom Talbott&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1131&quot;,&quot;Phone&quot;:&quot;(352) 561-4952&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Patty Talbott&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Tom Talbott — (352) 561-4952</div>
+<div class='line2'>1131 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Tracy Van Drieson&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(340) 514-4236&quot;,&quot;Email&quot;:&quot;tracyjean@live.com&quot;,&quot;OtherName&quot;:&quot;David Van Drieson&quot;,&quot;OtherPhone&quot;:&quot;(340) 514-5892&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Tracy Van Drieson — (340) 514-4236</div>
+<div class='line2'>1207 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Trini Froede&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1119&quot;,&quot;Phone&quot;:&quot;(941) 979-7451&quot;,&quot;Email&quot;:&quot;thevillagestrini@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Trini Froede — (941) 979-7451</div>
+<div class='line2'>1119 Santa Cruz Drive</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;Victoria Terry &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1101&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Edward Terry &quot;,&quot;OtherPhone&quot;:&quot;(352) 751-3722&quot;,&quot;OtherEmail&quot;:&quot;eterry353@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>Victoria Terry  — </div>
+<div class='line2'>1101 San Bernardo Road</div>
+</div>
+<div class='entry' data-json="{&quot;PersonName&quot;:&quot;W.Q Smith&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1107&quot;,&quot;Phone&quot;:&quot;(352) 259-2322&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Lori Smith &quot;,&quot;OtherPhone&quot;:&quot;(913) 244-9320&quot;,&quot;OtherEmail&quot;:&quot;slj12721@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
+<div class='line1'>W.Q Smith — (352) 259-2322</div>
+<div class='line2'>1107 San Bernardo Road</div>
+</div>
+</div>
+<script>
 
-    <!-- SPLASH SCREEN -->
-    <div id="splash">
-        <div id="splashTitle">Villa San Leandro Contacts</div>
-        <div id="splashDate"></div>
-    </div>
+document.getElementById('search').addEventListener('input', function() {
+    let q = this.value.toLowerCase();
+    document.querySelectorAll('.entry').forEach(e => {
+        let t = e.innerText.toLowerCase();
+        e.style.display = t.includes(q) ? '' : 'none';
+    });
+});
 
-    <!-- SEARCH BAR -->
-    <div id="searchBar">
-        <input id="searchInput" type="text" placeholder="Search...">
-    </div>
+document.querySelectorAll('.entry').forEach(e => {
+    e.addEventListener('click', () => {
+        let p = JSON.parse(e.dataset.json);
 
-    <!-- LIST WINDOW -->
-    <div id="listWindow">
-        <div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ann Fender &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1124&quot;,&quot;Phone&quot;:&quot;(717) 357-2997&quot;,&quot;Email&quot;:&quot;fendera@comcast.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Ann Fender  — (717) 357-2997</div>
-<div class="line2">1124 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ann Pape&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1224&quot;,&quot;Phone&quot;:&quot;(402) 320-0774&quot;,&quot;Email&quot;:&quot;aepape@gmail.com&quot;,&quot;OtherName&quot;:&quot;Jerry Pape&quot;,&quot;OtherPhone&quot;:&quot;(402) 201-8708&quot;,&quot;OtherEmail&quot;:&quot;jerrycpape@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Ann Pape — (402) 320-0774</div>
-<div class="line2">1224 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;April Hinds &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1216&quot;,&quot;Phone&quot;:&quot;(203) 305-7467&quot;,&quot;Email&quot;:&quot;adh1223@icloud.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">April Hinds  — (203) 305-7467</div>
-<div class="line2">1216 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Arlene Friesen &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1215&quot;,&quot;Phone&quot;:&quot;(952) 484-1531&quot;,&quot;Email&quot;:&quot;friesen9930@aol.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Arlene Friesen  — (952) 484-1531</div>
-<div class="line2">1215 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Barbara Finney &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1211&quot;,&quot;Phone&quot;:&quot;(904) 669-4554&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Barbara Finney  — (904) 669-4554</div>
-<div class="line2">1211 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ben Ventura &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1106&quot;,&quot;Phone&quot;:&quot;(212) 595-4289&quot;,&quot;Email&quot;:&quot;romabo84@gmail.com &quot;,&quot;OtherName&quot;:&quot;Rosemarie Borgia &quot;,&quot;OtherPhone&quot;:&quot;(202) 506-0730&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Ben Ventura  — (212) 595-4289</div>
-<div class="line2">1106 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bill Schwieger &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1140&quot;,&quot;Phone&quot;:&quot;(920) 381-5561&quot;,&quot;Email&quot;:&quot;williamschwieger@yahoo.com &quot;,&quot;OtherName&quot;:&quot;Sharon Peters&quot;,&quot;OtherPhone&quot;:&quot;(214) 923-8435&quot;,&quot;OtherEmail&quot;:&quot;biggs2b@aol.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bill Schwieger  — (920) 381-5561</div>
-<div class="line2">1140 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bill Sparks&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1206&quot;,&quot;Phone&quot;:&quot;(813) 956-8230&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jeff Shama&quot;,&quot;OtherPhone&quot;:&quot;(813) 505-6511&quot;,&quot;OtherEmail&quot;:&quot;jeffshama@hotmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bill Sparks — (813) 956-8230</div>
-<div class="line2">1206 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bill Thomas &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2901&quot;,&quot;Phone&quot;:&quot;(630) 347-0291&quot;,&quot;Email&quot;:&quot;jcoffee428@gmail.com &quot;,&quot;OtherName&quot;:&quot;Jess Thomas &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bill Thomas  — (630) 347-0291</div>
-<div class="line2">2901 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bob Enyeart&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1211&quot;,&quot;Phone&quot;:&quot;(352) 259-4116&quot;,&quot;Email&quot;:&quot;henyeart@comcast.net &quot;,&quot;OtherName&quot;:&quot;Helen Enyeart&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bob Enyeart — (352) 259-4116</div>
-<div class="line2">1211 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bob Kilkelly &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1217&quot;,&quot;Phone&quot;:&quot;(608) 516-3525&quot;,&quot;Email&quot;:&quot;rkilkelly@gmail.com &quot;,&quot;OtherName&quot;:&quot;Penny Kilkelly  &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bob Kilkelly  — (608) 516-3525</div>
-<div class="line2">1217 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bonnie Coffee   &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2909&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Charlie Coffee&quot;,&quot;OtherPhone&quot;:&quot;(612) 280-3212&quot;,&quot;OtherEmail&quot;:&quot;bncof@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bonnie Coffee   </div>
-<div class="line2">2909 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bonnie Houdek&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2919&quot;,&quot;Phone&quot;:&quot;(352) 753-3926&quot;,&quot;Email&quot;:&quot;blhoudek1@aol.com&quot;,&quot;OtherName&quot;:&quot;James Houdek&quot;,&quot;OtherPhone&quot;:&quot;(630) 370-2773&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bonnie Houdek — (352) 753-3926</div>
-<div class="line2">2919 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Brian Laskoskie &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1122&quot;,&quot;Phone&quot;:&quot;(407) 310-6300&quot;,&quot;Email&quot;:&quot;blaskofla@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Nancy Keatly&quot;,&quot;OtherPhone&quot;:&quot;(304) 573-6511&quot;,&quot;OtherEmail&quot;:&quot; &quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Brian Laskoskie  — (407) 310-6300</div>
-<div class="line2">1122 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Brigitte Reichert&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1102&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Guenter Reichert&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-1651&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Brigitte Reichert</div>
-<div class="line2">1102 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Bud Clark &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1212&quot;,&quot;Phone&quot;:&quot;(303) 725-0167&quot;,&quot;Email&quot;:&quot;clarkbandc@comcast.net &quot;,&quot;OtherName&quot;:&quot;Cathy Clark &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Bud Clark  — (303) 725-0167</div>
-<div class="line2">1212 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Carlos Barcelo&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;(787) 717-3094&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Mariana Barcelo&quot;,&quot;OtherPhone&quot;:&quot;(787) 220-2024&quot;,&quot;OtherEmail&quot;:&quot;mbarcelo1103@gmail.com&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
-<div class="line1">Carlos Barcelo — (787) 717-3094</div>
-<div class="line2">1221 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Carmen Doyle&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1116&quot;,&quot;Phone&quot;:&quot;(717) 357-0651&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
-<div class="line1">Carmen Doyle — (717) 357-0651</div>
-<div class="line2">1116 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Carol Burch&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1222&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Mike Burch&quot;,&quot;OtherPhone&quot;:&quot;(352) 751-0747&quot;,&quot;OtherEmail&quot;:&quot;mikecarolburch@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Carol Burch</div>
-<div class="line2">1222 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Carole Broderick &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1130&quot;,&quot;Phone&quot;:&quot;(440) 278-0003&quot;,&quot;Email&quot;:&quot;carolekirchner@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
-<div class="line1">Carole Broderick  — (440) 278-0003</div>
-<div class="line2">1130 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Cathy Clark &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1212&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bud Clark &quot;,&quot;OtherPhone&quot;:&quot;(303) 725-0167&quot;,&quot;OtherEmail&quot;:&quot;clarkbandc@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Cathy Clark </div>
-<div class="line2">1212 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Charlie Coffee&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2909&quot;,&quot;Phone&quot;:&quot;(612) 280-3212&quot;,&quot;Email&quot;:&quot;bncof@aol.com &quot;,&quot;OtherName&quot;:&quot;Bonnie Coffee   &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Charlie Coffee — (612) 280-3212</div>
-<div class="line2">2909 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Charlie Wagonschutz &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1210&quot;,&quot;Phone&quot;:&quot;(517) 202-9718&quot;,&quot;Email&quot;:&quot;crwrkw@aol.com &quot;,&quot;OtherName&quot;:&quot;Robyn Wagonschutz &quot;,&quot;OtherPhone&quot;:&quot;(517) 819-4144&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Charlie Wagonschutz  — (517) 202-9718</div>
-<div class="line2">1210 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Cheryl Holdefer&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2915&quot;,&quot;Phone&quot;:&quot;(352) 430-4486&quot;,&quot;Email&quot;:&quot;cherylholdefer@gmail.com&quot;,&quot;OtherName&quot;:&quot;Pat Miller&quot;,&quot;OtherPhone&quot;:&quot;(352) 552-4894&quot;,&quot;OtherEmail&quot;:&quot;patm2915@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Cheryl Holdefer — (352) 430-4486</div>
-<div class="line2">2915 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Cheryl Judge &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1108&quot;,&quot;Phone&quot;:&quot;(813) 285-0716&quot;,&quot;Email&quot;:&quot;kuno1111@icloud.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Cheryl Judge  — (813) 285-0716</div>
-<div class="line2">1108 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Cheryle Wise&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(303) 907-1012&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Tim Wise&quot;,&quot;OtherPhone&quot;:&quot;(303) 907-1812&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Cheryle Wise — (303) 907-1012</div>
-<div class="line2">1207 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Chris Parratore&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1118&quot;,&quot;Phone&quot;:&quot;(630) 290-6397&quot;,&quot;Email&quot;:&quot;cparratore@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Chris Parratore — (630) 290-6397</div>
-<div class="line2">1118 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Cindy Walton &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2917&quot;,&quot;Phone&quot;:&quot;(303) 242-7341&quot;,&quot;Email&quot;:&quot;cindyjo216@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Cindy Walton  — (303) 242-7341</div>
-<div class="line2">2917 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Connie Kelley&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1126&quot;,&quot;Phone&quot;:&quot;(352) 552-3176&quot;,&quot;Email&quot;:&quot;conniekelley1@mac.com&quot;,&quot;OtherName&quot;:&quot;Larry Kelley &quot;,&quot;OtherPhone&quot;:&quot;(203) 910-0046&quot;,&quot;OtherEmail&quot;:&quot;larrykelley09@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Connie Kelley — (352) 552-3176</div>
-<div class="line2">1126 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dan Falter &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;(352) 633-8987&quot;,&quot;Email&quot;:&quot;d.h.falter2@gmail.com &quot;,&quot;OtherName&quot;:&quot;Kanna Falter&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Dan Falter  — (352) 633-8987</div>
-<div class="line2">1213 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dar Settles&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1128&quot;,&quot;Phone&quot;:&quot;(270) 313-5749&quot;,&quot;Email&quot;:&quot;d.settles@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Lisa Mattingly&quot;,&quot;OtherPhone&quot;:&quot;(270) 231-2654&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR RENT&quot;}">
-<div class="line1">Dar Settles — (270) 313-5749</div>
-<div class="line2">1128 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dave Koleda&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1219&quot;,&quot;Phone&quot;:&quot;(810) 338-1372&quot;,&quot;Email&quot;:&quot;dkoledam22@gmail.com&quot;,&quot;OtherName&quot;:&quot;Linda Koleda&quot;,&quot;OtherPhone&quot;:&quot;(810) 338-3172&quot;,&quot;OtherEmail&quot;:&quot;lifeisgoodm22@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Dave Koleda — (810) 338-1372</div>
-<div class="line2">1219 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dave O&#39;Brien&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1104&quot;,&quot;Phone&quot;:&quot;(860) 798-6673&quot;,&quot;Email&quot;:&quot;pawsinnplay@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Dave O'Brien — (860) 798-6673</div>
-<div class="line2">1104 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;David Galloway&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1113&quot;,&quot;Phone&quot;:&quot;(212) 722-0756&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">David Galloway — (212) 722-0756</div>
-<div class="line2">1113 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;David Van Drieson&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(340) 514-5892&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Tracy Van Drieson&quot;,&quot;OtherPhone&quot;:&quot;(340) 514-4236&quot;,&quot;OtherEmail&quot;:&quot;tracyjean@live.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">David Van Drieson — (340) 514-5892</div>
-<div class="line2">1207 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;David Wronski&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1122&quot;,&quot;Phone&quot;:&quot;(321) 505-3556&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">David Wronski — (321) 505-3556</div>
-<div class="line2">1122 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dawn Cutler&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(218) 393-6349&quot;,&quot;Email&quot;:&quot;dawnreneec2395@gmail.com&quot;,&quot;OtherName&quot;:&quot;Paul Cutler&quot;,&quot;OtherPhone&quot;:&quot;(218) 393-6350&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Dawn Cutler — (218) 393-6349</div>
-<div class="line2">1208 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dee Butts &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2905&quot;,&quot;Phone&quot;:&quot;(407) 973-8753&quot;,&quot;Email&quot;:&quot;ddbutts@yahoo.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Dee Butts  — (407) 973-8753</div>
-<div class="line2">2905 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Diane Burkhardt&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1106&quot;,&quot;Phone&quot;:&quot;(484) 264-2927&quot;,&quot;Email&quot;:&quot;gagaparismom6fl@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Diane Burkhardt — (484) 264-2927</div>
-<div class="line2">1106 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dick Dufresne &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1142&quot;,&quot;Phone&quot;:&quot;(352) 750-4743&quot;,&quot;Email&quot;:&quot;jddufresne@comcast.net &quot;,&quot;OtherName&quot;:&quot;Jolyne Dufresne&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Dick Dufresne  — (352) 750-4743</div>
-<div class="line2">1142 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Donna Ryan &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1201&quot;,&quot;Phone&quot;:&quot;(717) 968-3210&quot;,&quot;Email&quot;:&quot;dryan4555@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Donna Ryan  — (717) 968-3210</div>
-<div class="line2">1201 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Donna Williams &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(757) 771-6450&quot;,&quot;Email&quot;:&quot;wdonna695@msn.com   &quot;,&quot;OtherName&quot;:&quot;Terry Williams&quot;,&quot;OtherPhone&quot;:&quot;(757) 284-4137&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Donna Williams  — (757) 771-6450</div>
-<div class="line2">1208 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Doreen Hartman &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1218&quot;,&quot;Phone&quot;:&quot;(352) 259-0231&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Doreen Hartman  — (352) 259-0231</div>
-<div class="line2">1218 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Dot Churchill &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1206&quot;,&quot;Phone&quot;:&quot;(207) 712-3868&quot;,&quot;Email&quot;:&quot;dorothychurchill001@comcast.net&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Dot Churchill  — (207) 712-3868</div>
-<div class="line2">1206 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Edward Terry &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1101&quot;,&quot;Phone&quot;:&quot;(352) 751-3722&quot;,&quot;Email&quot;:&quot;eterry353@gmail.com &quot;,&quot;OtherName&quot;:&quot;Victoria Terry &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Edward Terry  — (352) 751-3722</div>
-<div class="line2">1101 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ehren Graf&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1203&quot;,&quot;Phone&quot;:&quot;(920) 819-9951&quot;,&quot;Email&quot;:&quot;bing2350@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Jody Graf&quot;,&quot;OtherPhone&quot;:&quot;(920) 750-2233&quot;,&quot;OtherEmail&quot;:&quot;thanks4stoppen@yahoo.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Ehren Graf — (920) 819-9951</div>
-<div class="line2">1203 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Eileen Sweeney &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(347) 733-2473&quot;,&quot;Email&quot;:&quot;eileenm722@verizon.net &quot;,&quot;OtherName&quot;:&quot;Pat Sweeney&quot;,&quot;OtherPhone&quot;:&quot;(347) 524-7990&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Eileen Sweeney  — (347) 733-2473</div>
-<div class="line2">1114 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Gail Neblett&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1118&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jim Neblett&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-4522&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Gail Neblett</div>
-<div class="line2">1118 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Gail Raber &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(352) 727-3662&quot;,&quot;Email&quot;:&quot;gailraber12@aol.com &quot;,&quot;OtherName&quot;:&quot;Paul Raber&quot;,&quot;OtherPhone&quot;:&quot;(352) 348-1303&quot;,&quot;OtherEmail&quot;:&quot; &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Gail Raber  — (352) 727-3662</div>
-<div class="line2">1114 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Gary Halladay  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1134&quot;,&quot;Phone&quot;:&quot;(616) 262-8989&quot;,&quot;Email&quot;:&quot;suehalladay5@gmail.com &quot;,&quot;OtherName&quot;:&quot;Sue Halladay&quot;,&quot;OtherPhone&quot;:&quot;(616) 723-1234&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Gary Halladay   — (616) 262-8989</div>
-<div class="line2">1134 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Gary Kuhlmey&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1112&quot;,&quot;Phone&quot;:&quot;(352) 750-4832&quot;,&quot;Email&quot;:&quot;anngaryk@bellsouth.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Gary Kuhlmey — (352) 750-4832</div>
-<div class="line2">1112 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Grace Doran &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1212&quot;,&quot;Phone&quot;:&quot;(513) 315-7142&quot;,&quot;Email&quot;:&quot;gdoran8680@aol.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Grace Doran  — (513) 315-7142</div>
-<div class="line2">1212 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Guenter Reichert&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1102&quot;,&quot;Phone&quot;:&quot;(352) 259-1651&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Brigitte Reichert&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Guenter Reichert — (352) 259-1651</div>
-<div class="line2">1102 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Harry Black &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1110&quot;,&quot;Phone&quot;:&quot;(352) 259-4749&quot;,&quot;Email&quot;:&quot;harryblack1@sbcglobal.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Harry Black  — (352) 259-4749</div>
-<div class="line2">1110 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Heidi Barcia  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1220&quot;,&quot;Phone&quot;:&quot;(775) 233-0174&quot;,&quot;Email&quot;:&quot;heididragsten@gmail.com &quot;,&quot;OtherName&quot;:&quot;Kathy Haugan&quot;,&quot;OtherPhone&quot;:&quot;(605) 695-0053&quot;,&quot;OtherEmail&quot;:&quot;khaugan80@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Heidi Barcia   — (775) 233-0174</div>
-<div class="line2">1220 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Helen Enyeart&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1211&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bob Enyeart&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-4116&quot;,&quot;OtherEmail&quot;:&quot;henyeart@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Helen Enyeart</div>
-<div class="line2">1211 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Henry Walbesser &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1124&quot;,&quot;Phone&quot;:&quot;(703) 967-8738&quot;,&quot;Email&quot;:&quot;mindylrw@gmail.com &quot;,&quot;OtherName&quot;:&quot;Mindy Walbesser&quot;,&quot;OtherPhone&quot;:&quot;(703) 216-6982&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Henry Walbesser  — (703) 967-8738</div>
-<div class="line2">1124 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Hugh Orin&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1125&quot;,&quot;Phone&quot;:&quot;(352) 409-6735&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Kathy Dermody&quot;,&quot;OtherPhone&quot;:&quot;(352) 753-3798&quot;,&quot;OtherEmail&quot;:&quot;kathydermody@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Hugh Orin — (352) 409-6735</div>
-<div class="line2">1125 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;James Houdek&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2919&quot;,&quot;Phone&quot;:&quot;(630) 370-2773&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bonnie Houdek&quot;,&quot;OtherPhone&quot;:&quot;(352) 753-3926&quot;,&quot;OtherEmail&quot;:&quot;blhoudek1@aol.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">James Houdek — (630) 370-2773</div>
-<div class="line2">2919 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;James Paulk&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2911&quot;,&quot;Phone&quot;:&quot;(248) 345-2012&quot;,&quot;Email&quot;:&quot;thepaulks@sbcglobal.net&quot;,&quot;OtherName&quot;:&quot;Laura Paulk&quot;,&quot;OtherPhone&quot;:&quot;(248) 231-9640&quot;,&quot;OtherEmail&quot;:&quot;laurapaulk@hotmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">James Paulk — (248) 345-2012</div>
-<div class="line2">2911 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jan Cope &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1216&quot;,&quot;Phone&quot;:&quot;(618) 402-2389&quot;,&quot;Email&quot;:&quot;jantoboat@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jan Cope  — (618) 402-2389</div>
-<div class="line2">1216 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Janette Vail&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1110&quot;,&quot;Phone&quot;:&quot;(352) 598-1738&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Thomas Vail&quot;,&quot;OtherPhone&quot;:&quot;(352) 751-0605&quot;,&quot;OtherEmail&quot;:&quot;tomjanette@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Janette Vail — (352) 598-1738</div>
-<div class="line2">1110 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;JB Bergeron&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1123&quot;,&quot;Phone&quot;:&quot;(619) 861-4166&quot;,&quot;Email&quot;:&quot;jbees94@hotmail.com &quot;,&quot;OtherName&quot;:&quot;Ric Osborne&quot;,&quot;OtherPhone&quot;:&quot;(619) 756-0431&quot;,&quot;OtherEmail&quot;:&quot;shotzy55@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">JB Bergeron — (619) 861-4166</div>
-<div class="line2">1123 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jean Barros&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1119&quot;,&quot;Phone&quot;:&quot;(860) 759-2883&quot;,&quot;Email&quot;:&quot;jbarross@svcglobal.net&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jean Barros — (860) 759-2883</div>
-<div class="line2">1119 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jean Hanham&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2913&quot;,&quot;Phone&quot;:&quot;(201) 953-0252&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Ron LaDucer&quot;,&quot;OtherPhone&quot;:&quot;(201) 552-6144&quot;,&quot;OtherEmail&quot;:&quot;ronjean6159@gmail.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Jean Hanham — (201) 953-0252</div>
-<div class="line2">2913 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jean Olivea&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1204&quot;,&quot;Phone&quot;:&quot;(561) 699-4581&quot;,&quot;Email&quot;:&quot;jeanolivea1943@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jean Olivea — (561) 699-4581</div>
-<div class="line2">1204 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jeff Shama&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1206&quot;,&quot;Phone&quot;:&quot;(813) 505-6511&quot;,&quot;Email&quot;:&quot;jeffshama@hotmail.com&quot;,&quot;OtherName&quot;:&quot;Bill Sparks&quot;,&quot;OtherPhone&quot;:&quot;(813) 956-8230&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jeff Shama — (813) 505-6511</div>
-<div class="line2">1206 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jerome Bence&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1102&quot;,&quot;Phone&quot;:&quot;(425) 641-5534&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Jerome Bence — (425) 641-5534</div>
-<div class="line2">1102 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jerry Dorfman&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1135&quot;,&quot;Phone&quot;:&quot;(954) 588-2693&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Judy Dorfman&quot;,&quot;OtherPhone&quot;:&quot;(954) 294-2904&quot;,&quot;OtherEmail&quot;:&quot;dorfmanje@bellsouth.net&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jerry Dorfman — (954) 588-2693</div>
-<div class="line2">1135 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jerry Nugent &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;(352) 753-5215&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Patricia Nugent &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jerry Nugent  — (352) 753-5215</div>
-<div class="line2">1214 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jerry Pape&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1224&quot;,&quot;Phone&quot;:&quot;(402) 201-8708&quot;,&quot;Email&quot;:&quot;jerrycpape@gmail.com&quot;,&quot;OtherName&quot;:&quot;Ann Pape&quot;,&quot;OtherPhone&quot;:&quot;(402) 320-0774&quot;,&quot;OtherEmail&quot;:&quot;aepape@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jerry Pape — (402) 201-8708</div>
-<div class="line2">1224 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jess Thomas &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2901&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bill Thomas &quot;,&quot;OtherPhone&quot;:&quot;(630) 347-0291&quot;,&quot;OtherEmail&quot;:&quot;jcoffee428@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jess Thomas </div>
-<div class="line2">2901 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jim &amp; Linda Molnar&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1204&quot;,&quot;Phone&quot;:&quot;(979) 446-5069&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Rebecca Molnar&quot;,&quot;OtherPhone&quot;:&quot;(832) 703-5315&quot;,&quot;OtherEmail&quot;:&quot;rebmolnar@yahoo.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jim & Linda Molnar — (979) 446-5069</div>
-<div class="line2">1204 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jim Neblett&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1118&quot;,&quot;Phone&quot;:&quot;(352) 259-4522&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Gail Neblett&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jim Neblett — (352) 259-4522</div>
-<div class="line2">1118 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jim Storms &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;(614) 886-3007&quot;,&quot;Email&quot;:&quot;jwstorms2@gmail.com &quot;,&quot;OtherName&quot;:&quot;Lynne Storms &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jim Storms  — (614) 886-3007</div>
-<div class="line2">1213 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Joan Nicholas  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1132&quot;,&quot;Phone&quot;:&quot;(715) 864-9340&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;John Nicholas &quot;,&quot;OtherPhone&quot;:&quot;(352) 874-7005&quot;,&quot;OtherEmail&quot;:&quot;joan.nicholas@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Joan Nicholas   — (715) 864-9340</div>
-<div class="line2">1132 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jody Graf&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1203&quot;,&quot;Phone&quot;:&quot;(920) 750-2233&quot;,&quot;Email&quot;:&quot;thanks4stoppen@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Ehren Graf&quot;,&quot;OtherPhone&quot;:&quot;(920) 819-9951&quot;,&quot;OtherEmail&quot;:&quot;bing2350@yahoo.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Jody Graf — (920) 750-2233</div>
-<div class="line2">1203 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Joe Apple&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1111&quot;,&quot;Phone&quot;:&quot;(814) 937-2468&quot;,&quot;Email&quot;:&quot;rlzeigler@verizon.net&quot;,&quot;OtherName&quot;:&quot;Robin Apple&quot;,&quot;OtherPhone&quot;:&quot;(814) 312-5563&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Joe Apple — (814) 937-2468</div>
-<div class="line2">1111 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;John Doyle &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1209&quot;,&quot;Phone&quot;:&quot;(404) 461-9978&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Sylvia Doyle &quot;,&quot;OtherPhone&quot;:&quot;(608) 436-6325&quot;,&quot;OtherEmail&quot;:&quot;sylvia.doyle@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">John Doyle  — (404) 461-9978</div>
-<div class="line2">1209 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;John Holze&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1104&quot;,&quot;Phone&quot;:&quot;(516) 526-4018&quot;,&quot;Email&quot;:&quot;johnholze@yahoo.com &quot;,&quot;OtherName&quot;:&quot;Lenora Holze&quot;,&quot;OtherPhone&quot;:&quot;(516) 503-0086&quot;,&quot;OtherEmail&quot;:&quot;lenoraholze@yahoo.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">John Holze — (516) 526-4018</div>
-<div class="line2">1104 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;John McDonald&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1136&quot;,&quot;Phone&quot;:&quot;(218) 821-1732&quot;,&quot;Email&quot;:&quot;64jmcdonald@gmail.com&quot;,&quot;OtherName&quot;:&quot;Kristil McDonald&quot;,&quot;OtherPhone&quot;:&quot;(218) 821-4297&quot;,&quot;OtherEmail&quot;:&quot;mcdonaldkristil54@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">John McDonald — (218) 821-1732</div>
-<div class="line2">1136 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;John Nicholas &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1132&quot;,&quot;Phone&quot;:&quot;(352) 874-7005&quot;,&quot;Email&quot;:&quot;joan.nicholas@gmail.com &quot;,&quot;OtherName&quot;:&quot;Joan Nicholas  &quot;,&quot;OtherPhone&quot;:&quot;(715) 864-9340&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">John Nicholas  — (352) 874-7005</div>
-<div class="line2">1132 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Jolyne Dufresne&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1142&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dick Dufresne &quot;,&quot;OtherPhone&quot;:&quot;(352) 750-4743&quot;,&quot;OtherEmail&quot;:&quot;jddufresne@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Jolyne Dufresne</div>
-<div class="line2">1142 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Josie Pambo &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1202&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Manny Pambo &quot;,&quot;OtherPhone&quot;:&quot;(817) 821-0593&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Josie Pambo </div>
-<div class="line2">1202 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Joy Allocca&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1115&quot;,&quot;Phone&quot;:&quot;(917) 971-3900&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Ralph Allocca&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Joy Allocca — (917) 971-3900</div>
-<div class="line2">1115 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Juanita Whitley &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1203&quot;,&quot;Phone&quot;:&quot;(352) 259-9403&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Juanita Whitley  — (352) 259-9403</div>
-<div class="line2">1203 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Judy Dorfman&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1135&quot;,&quot;Phone&quot;:&quot;(954) 294-2904&quot;,&quot;Email&quot;:&quot;dorfmanje@bellsouth.net&quot;,&quot;OtherName&quot;:&quot;Jerry Dorfman&quot;,&quot;OtherPhone&quot;:&quot;(954) 588-2693&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Judy Dorfman — (954) 294-2904</div>
-<div class="line2">1135 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Judy Shepherd &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1109&quot;,&quot;Phone&quot;:&quot;(850) 428-0633&quot;,&quot;Email&quot;:&quot;judyshep0633@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Judy Shepherd  — (850) 428-0633</div>
-<div class="line2">1109 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Julie Collins &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1205&quot;,&quot;Phone&quot;:&quot;(352) 430-7465&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Julie Collins  — (352) 430-7465</div>
-<div class="line2">1205 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Kanna Falter&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dan Falter &quot;,&quot;OtherPhone&quot;:&quot;(352) 633-8987&quot;,&quot;OtherEmail&quot;:&quot;d.h.falter2@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Kanna Falter</div>
-<div class="line2">1213 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Kathy Dermody&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1125&quot;,&quot;Phone&quot;:&quot;(352) 753-3798&quot;,&quot;Email&quot;:&quot;kathydermody@yahoo.com &quot;,&quot;OtherName&quot;:&quot;Hugh Orin&quot;,&quot;OtherPhone&quot;:&quot;(352) 409-6735&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Kathy Dermody — (352) 753-3798</div>
-<div class="line2">1125 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Kathy Haugan&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1220&quot;,&quot;Phone&quot;:&quot;(605) 695-0053&quot;,&quot;Email&quot;:&quot;khaugan80@gmail.com&quot;,&quot;OtherName&quot;:&quot;Heidi Barcia  &quot;,&quot;OtherPhone&quot;:&quot;(775) 233-0174&quot;,&quot;OtherEmail&quot;:&quot;heididragsten@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Kathy Haugan — (605) 695-0053</div>
-<div class="line2">1220 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Kimberly Macintosh&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1210&quot;,&quot;Phone&quot;:&quot;(401) 283-0043&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Kimberly Macintosh — (401) 283-0043</div>
-<div class="line2">1210 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Kirby Bowman &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1103&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Patty Bowman &quot;,&quot;OtherPhone&quot;:&quot;(214) 505-7387&quot;,&quot;OtherEmail&quot;:&quot;bowmanpa@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Kirby Bowman </div>
-<div class="line2">1103 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Kris Burr&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Steve Burr &quot;,&quot;OtherPhone&quot;:&quot;(641) 485-2923&quot;,&quot;OtherEmail&quot;:&quot;kris52339@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Kris Burr</div>
-<div class="line2">1221 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Kristil McDonald&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1136&quot;,&quot;Phone&quot;:&quot;(218) 821-4297&quot;,&quot;Email&quot;:&quot;mcdonaldkristil54@gmail.com&quot;,&quot;OtherName&quot;:&quot;John McDonald&quot;,&quot;OtherPhone&quot;:&quot;(218) 821-1732&quot;,&quot;OtherEmail&quot;:&quot;64jmcdonald@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Kristil McDonald — (218) 821-4297</div>
-<div class="line2">1136 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Larry Conway &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2903&quot;,&quot;Phone&quot;:&quot;(631) 875-2868&quot;,&quot;Email&quot;:&quot;conway615@aol.com &quot;,&quot;OtherName&quot;:&quot;Sue Conway&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Larry Conway  — (631) 875-2868</div>
-<div class="line2">2903 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Larry Henke&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1202&quot;,&quot;Phone&quot;:&quot;(352) 467-4320&quot;,&quot;Email&quot;:&quot;larryron34@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Larry Henke — (352) 467-4320</div>
-<div class="line2">1202 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Larry Kelley &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1126&quot;,&quot;Phone&quot;:&quot;(203) 910-0046&quot;,&quot;Email&quot;:&quot;larrykelley09@gmail.com &quot;,&quot;OtherName&quot;:&quot;Connie Kelley&quot;,&quot;OtherPhone&quot;:&quot;(352) 552-3176&quot;,&quot;OtherEmail&quot;:&quot;conniekelley1@mac.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Larry Kelley  — (203) 910-0046</div>
-<div class="line2">1126 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Laura Paulk&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2911&quot;,&quot;Phone&quot;:&quot;(248) 231-9640&quot;,&quot;Email&quot;:&quot;laurapaulk@hotmail.com&quot;,&quot;OtherName&quot;:&quot;James Paulk&quot;,&quot;OtherPhone&quot;:&quot;(248) 345-2012&quot;,&quot;OtherEmail&quot;:&quot;thepaulks@sbcglobal.net&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Laura Paulk — (248) 231-9640</div>
-<div class="line2">2911 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Laura Walden &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1120&quot;,&quot;Phone&quot;:&quot;(813) 228-0408&quot;,&quot;Email&quot;:&quot;sports.features@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Laura Walden  — (813) 228-0408</div>
-<div class="line2">1120 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Lenora Holze&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1104&quot;,&quot;Phone&quot;:&quot;(516) 503-0086&quot;,&quot;Email&quot;:&quot;lenoraholze@yahoo.com&quot;,&quot;OtherName&quot;:&quot;John Holze&quot;,&quot;OtherPhone&quot;:&quot;(516) 526-4018&quot;,&quot;OtherEmail&quot;:&quot;johnholze@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Lenora Holze — (516) 503-0086</div>
-<div class="line2">1104 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Linda Beatty &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1215&quot;,&quot;Phone&quot;:&quot;(480) 540-0742&quot;,&quot;Email&quot;:&quot;lsbeatty@hotmail.com &quot;,&quot;OtherName&quot;:&quot;Rich Kloc&quot;,&quot;OtherPhone&quot;:&quot;(480) 540-0743&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Linda Beatty  — (480) 540-0742</div>
-<div class="line2">1215 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Linda Giardino &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;(845) 642-5113&quot;,&quot;Email&quot;:&quot;lindagiardino@hotmail.com &quot;,&quot;OtherName&quot;:&quot;Ralph Barrea&quot;,&quot;OtherPhone&quot;:&quot;(914) 708-7318&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Linda Giardino  — (845) 642-5113</div>
-<div class="line2">1214 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Linda Koleda&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1219&quot;,&quot;Phone&quot;:&quot;(810) 338-3172&quot;,&quot;Email&quot;:&quot;lifeisgoodm22@gmail.com&quot;,&quot;OtherName&quot;:&quot;Dave Koleda&quot;,&quot;OtherPhone&quot;:&quot;(810) 338-1372&quot;,&quot;OtherEmail&quot;:&quot;dkoledam22@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Linda Koleda — (810) 338-3172</div>
-<div class="line2">1219 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Lisa Mattingly&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1128&quot;,&quot;Phone&quot;:&quot;(270) 231-2654&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dar Settles&quot;,&quot;OtherPhone&quot;:&quot;(270) 313-5749&quot;,&quot;OtherEmail&quot;:&quot;d.settles@yahoo.com&quot;,&quot;PType&quot;:&quot;FOR RENT&quot;}">
-<div class="line1">Lisa Mattingly — (270) 231-2654</div>
-<div class="line2">1128 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Lori Smith &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1107&quot;,&quot;Phone&quot;:&quot;(913) 244-9320&quot;,&quot;Email&quot;:&quot;slj12721@yahoo.com &quot;,&quot;OtherName&quot;:&quot;W.Q Smith&quot;,&quot;OtherPhone&quot;:&quot;(352) 259-2322&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Lori Smith  — (913) 244-9320</div>
-<div class="line2">1107 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Lou Manosalva&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1205&quot;,&quot;Phone&quot;:&quot;(352) 444-9942&quot;,&quot;Email&quot;:&quot;bogomano66@comcast.net &quot;,&quot;OtherName&quot;:&quot;Marina Manosalva &quot;,&quot;OtherPhone&quot;:&quot;(352) 603-1592&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Lou Manosalva — (352) 444-9942</div>
-<div class="line2">1205 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Lynne Storms &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1213&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jim Storms &quot;,&quot;OtherPhone&quot;:&quot;(614) 886-3007&quot;,&quot;OtherEmail&quot;:&quot;jwstorms2@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Lynne Storms </div>
-<div class="line2">1213 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Manny Pambo &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1202&quot;,&quot;Phone&quot;:&quot;(817) 821-0593&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Josie Pambo &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Manny Pambo  — (817) 821-0593</div>
-<div class="line2">1202 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Mariana Barcelo&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;(787) 220-2024&quot;,&quot;Email&quot;:&quot;mbarcelo1103@gmail.com&quot;,&quot;OtherName&quot;:&quot;Carlos Barcelo&quot;,&quot;OtherPhone&quot;:&quot;(787) 717-3094&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
-<div class="line1">Mariana Barcelo — (787) 220-2024</div>
-<div class="line2">1221 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Marina Manosalva &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1205&quot;,&quot;Phone&quot;:&quot;(352) 603-1592&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Lou Manosalva&quot;,&quot;OtherPhone&quot;:&quot;(352) 444-9942&quot;,&quot;OtherEmail&quot;:&quot;bogomano66@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Marina Manosalva  — (352) 603-1592</div>
-<div class="line2">1205 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Mario Percopo&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1105&quot;,&quot;Phone&quot;:&quot;(407) 221-1263&quot;,&quot;Email&quot;:&quot;mariopercopo@gmail.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Mario Percopo — (407) 221-1263</div>
-<div class="line2">1105 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Michael Harris &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2907&quot;,&quot;Phone&quot;:&quot;(352) 205-1616&quot;,&quot;Email&quot;:&quot;sky470722@aol.com &quot;,&quot;OtherName&quot;:&quot;Sandy Harris &quot;,&quot;OtherPhone&quot;:&quot;(407) 797-3814&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Michael Harris  — (352) 205-1616</div>
-<div class="line2">2907 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Mike Burch&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1222&quot;,&quot;Phone&quot;:&quot;(352) 751-0747&quot;,&quot;Email&quot;:&quot;mikecarolburch@gmail.com &quot;,&quot;OtherName&quot;:&quot;Carol Burch&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Mike Burch — (352) 751-0747</div>
-<div class="line2">1222 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Mindy Walbesser&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1124&quot;,&quot;Phone&quot;:&quot;(703) 216-6982&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Henry Walbesser &quot;,&quot;OtherPhone&quot;:&quot;(703) 967-8738&quot;,&quot;OtherEmail&quot;:&quot;mindylrw@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Mindy Walbesser — (703) 216-6982</div>
-<div class="line2">1124 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Muriel Mastrianni&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1120&quot;,&quot;Phone&quot;:&quot;(860) 384-5271&quot;,&quot;Email&quot;:&quot;murielmastrianni@icloud.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Muriel Mastrianni — (860) 384-5271</div>
-<div class="line2">1120 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Murray Schmelzer&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1139&quot;,&quot;Phone&quot;:&quot;(614) 206-1165&quot;,&quot;Email&quot;:&quot;hipmurray@gmail.com&quot;,&quot;OtherName&quot;:&quot;Sue Schmelzer&quot;,&quot;OtherPhone&quot;:&quot;(614) 206-1195&quot;,&quot;OtherEmail&quot;:&quot;ssmellsir@aol.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Murray Schmelzer — (614) 206-1165</div>
-<div class="line2">1139 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Nancy Davis &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1123&quot;,&quot;Phone&quot;:&quot;(317) 440-0238&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Nancy Davis  — (317) 440-0238</div>
-<div class="line2">1123 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Nancy Hankins &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1112&quot;,&quot;Phone&quot;:&quot;(352) 250-7868&quot;,&quot;Email&quot;:&quot;hankinswj@frontiernet.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Nancy Hankins  — (352) 250-7868</div>
-<div class="line2">1112 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Nancy Keatly&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1122&quot;,&quot;Phone&quot;:&quot;(304) 573-6511&quot;,&quot;Email&quot;:&quot; &quot;,&quot;OtherName&quot;:&quot;Brian Laskoskie &quot;,&quot;OtherPhone&quot;:&quot;(407) 310-6300&quot;,&quot;OtherEmail&quot;:&quot;blaskofla@yahoo.com&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Nancy Keatly — (304) 573-6511</div>
-<div class="line2">1122 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Nancy Marchant &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1121&quot;,&quot;Phone&quot;:&quot;(352) 283-7631&quot;,&quot;Email&quot;:&quot;nancymarchant@me.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Nancy Marchant  — (352) 283-7631</div>
-<div class="line2">1121 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Natalie Spiegle&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1133&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Steve Spiegle&quot;,&quot;OtherPhone&quot;:&quot;(352) 775-6870&quot;,&quot;OtherEmail&quot;:&quot;nataliestephenspiegle@comcast.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Natalie Spiegle</div>
-<div class="line2">1133 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Pam Vitko   &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1219&quot;,&quot;Phone&quot;:&quot;(203) 209-1062&quot;,&quot;Email&quot;:&quot;dappledogs@hotmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Pam Vitko    — (203) 209-1062</div>
-<div class="line2">1219 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Pat Miller&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2915&quot;,&quot;Phone&quot;:&quot;(352) 552-4894&quot;,&quot;Email&quot;:&quot;patm2915@gmail.com&quot;,&quot;OtherName&quot;:&quot;Cheryl Holdefer&quot;,&quot;OtherPhone&quot;:&quot;(352) 430-4486&quot;,&quot;OtherEmail&quot;:&quot;cherylholdefer@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Pat Miller — (352) 552-4894</div>
-<div class="line2">2915 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Pat Sweeney&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(347) 524-7990&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Eileen Sweeney &quot;,&quot;OtherPhone&quot;:&quot;(347) 733-2473&quot;,&quot;OtherEmail&quot;:&quot;eileenm722@verizon.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Pat Sweeney — (347) 524-7990</div>
-<div class="line2">1114 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Patricia Nugent &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Jerry Nugent &quot;,&quot;OtherPhone&quot;:&quot;(352) 753-5215&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Patricia Nugent </div>
-<div class="line2">1214 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Patti Carlson &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1108&quot;,&quot;Phone&quot;:&quot;(203) 537-0581&quot;,&quot;Email&quot;:&quot;plc1810@att.net &quot;,&quot;OtherName&quot;:&quot;Richard Carlson &quot;,&quot;OtherPhone&quot;:&quot;(203) 537-4723&quot;,&quot;OtherEmail&quot;:&quot;carlson.richard@att.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Patti Carlson  — (203) 537-0581</div>
-<div class="line2">1108 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Patty Bowman &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1103&quot;,&quot;Phone&quot;:&quot;(214) 505-7387&quot;,&quot;Email&quot;:&quot;bowmanpa@aol.com &quot;,&quot;OtherName&quot;:&quot;Kirby Bowman &quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Patty Bowman  — (214) 505-7387</div>
-<div class="line2">1103 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Patty Talbott&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1131&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Tom Talbott&quot;,&quot;OtherPhone&quot;:&quot;(352) 561-4952&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Patty Talbott</div>
-<div class="line2">1131 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Paul Cutler&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(218) 393-6350&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Dawn Cutler&quot;,&quot;OtherPhone&quot;:&quot;(218) 393-6349&quot;,&quot;OtherEmail&quot;:&quot;dawnreneec2395@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Paul Cutler — (218) 393-6350</div>
-<div class="line2">1208 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Paul Raber&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1114&quot;,&quot;Phone&quot;:&quot;(352) 348-1303&quot;,&quot;Email&quot;:&quot; &quot;,&quot;OtherName&quot;:&quot;Gail Raber &quot;,&quot;OtherPhone&quot;:&quot;(352) 727-3662&quot;,&quot;OtherEmail&quot;:&quot;gailraber12@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Paul Raber — (352) 348-1303</div>
-<div class="line2">1114 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Paula Griego&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1117&quot;,&quot;Phone&quot;:&quot;(303) 596-4669&quot;,&quot;Email&quot;:&quot;p.e.griego@msn.com&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Paula Griego — (303) 596-4669</div>
-<div class="line2">1117 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Penny Kilkelly  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1217&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Bob Kilkelly &quot;,&quot;OtherPhone&quot;:&quot;(608) 516-3525&quot;,&quot;OtherEmail&quot;:&quot;rkilkelly@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Penny Kilkelly  </div>
-<div class="line2">1217 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Peter Schmitz&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1121&quot;,&quot;Phone&quot;:&quot;(239) 936-5810&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Peter Schmitz — (239) 936-5810</div>
-<div class="line2">1121 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ralph Allocca&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1115&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Joy Allocca&quot;,&quot;OtherPhone&quot;:&quot;(917) 971-3900&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Ralph Allocca</div>
-<div class="line2">1115 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ralph Barrea&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1214&quot;,&quot;Phone&quot;:&quot;(914) 708-7318&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Linda Giardino &quot;,&quot;OtherPhone&quot;:&quot;(845) 642-5113&quot;,&quot;OtherEmail&quot;:&quot;lindagiardino@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Ralph Barrea — (914) 708-7318</div>
-<div class="line2">1214 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Rebecca Molnar&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1204&quot;,&quot;Phone&quot;:&quot;(832) 703-5315&quot;,&quot;Email&quot;:&quot;rebmolnar@yahoo.com&quot;,&quot;OtherName&quot;:&quot;Jim &amp; Linda Molnar&quot;,&quot;OtherPhone&quot;:&quot;(979) 446-5069&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Rebecca Molnar — (832) 703-5315</div>
-<div class="line2">1204 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Renee Beck &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1127&quot;,&quot;Phone&quot;:&quot;(352) 661-4173&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Renee Beck  — (352) 661-4173</div>
-<div class="line2">1127 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ric Osborne&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1123&quot;,&quot;Phone&quot;:&quot;(619) 756-0431&quot;,&quot;Email&quot;:&quot;shotzy55@hotmail.com &quot;,&quot;OtherName&quot;:&quot;JB Bergeron&quot;,&quot;OtherPhone&quot;:&quot;(619) 861-4166&quot;,&quot;OtherEmail&quot;:&quot;jbees94@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Ric Osborne — (619) 756-0431</div>
-<div class="line2">1123 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Rich Kloc&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1215&quot;,&quot;Phone&quot;:&quot;(480) 540-0743&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Linda Beatty &quot;,&quot;OtherPhone&quot;:&quot;(480) 540-0742&quot;,&quot;OtherEmail&quot;:&quot;lsbeatty@hotmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Rich Kloc — (480) 540-0743</div>
-<div class="line2">1215 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Richard Carlson &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1108&quot;,&quot;Phone&quot;:&quot;(203) 537-4723&quot;,&quot;Email&quot;:&quot;carlson.richard@att.net &quot;,&quot;OtherName&quot;:&quot;Patti Carlson &quot;,&quot;OtherPhone&quot;:&quot;(203) 537-0581&quot;,&quot;OtherEmail&quot;:&quot;plc1810@att.net &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Richard Carlson  — (203) 537-4723</div>
-<div class="line2">1108 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Rick Sollman&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1138&quot;,&quot;Phone&quot;:&quot;(352) 638-7116&quot;,&quot;Email&quot;:&quot;rick.sollman@yahoo.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Rick Sollman — (352) 638-7116</div>
-<div class="line2">1138 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Robin Apple&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1111&quot;,&quot;Phone&quot;:&quot;(814) 312-5563&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Joe Apple&quot;,&quot;OtherPhone&quot;:&quot;(814) 937-2468&quot;,&quot;OtherEmail&quot;:&quot;rlzeigler@verizon.net&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Robin Apple — (814) 312-5563</div>
-<div class="line2">1111 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Robyn Wagonschutz &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1210&quot;,&quot;Phone&quot;:&quot;(517) 819-4144&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Charlie Wagonschutz &quot;,&quot;OtherPhone&quot;:&quot;(517) 202-9718&quot;,&quot;OtherEmail&quot;:&quot;crwrkw@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Robyn Wagonschutz  — (517) 819-4144</div>
-<div class="line2">1210 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ron LaDucer&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2913&quot;,&quot;Phone&quot;:&quot;(201) 552-6144&quot;,&quot;Email&quot;:&quot;ronjean6159@gmail.com&quot;,&quot;OtherName&quot;:&quot;Jean Hanham&quot;,&quot;OtherPhone&quot;:&quot;(201) 953-0252&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Ron LaDucer — (201) 552-6144</div>
-<div class="line2">2913 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Roseann Fortier  &quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1224&quot;,&quot;Phone&quot;:&quot;(352) 350-6050&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Roseann Fortier   — (352) 350-6050</div>
-<div class="line2">1224 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Rosemarie Borgia &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1106&quot;,&quot;Phone&quot;:&quot;(202) 506-0730&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Ben Ventura &quot;,&quot;OtherPhone&quot;:&quot;(212) 595-4289&quot;,&quot;OtherEmail&quot;:&quot;romabo84@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Rosemarie Borgia  — (202) 506-0730</div>
-<div class="line2">1106 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Ruth Burkhardt &quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1116&quot;,&quot;Phone&quot;:&quot;(610) 554-7631&quot;,&quot;Email&quot;:&quot;ruthburkhardt@comcast.net &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Ruth Burkhardt  — (610) 554-7631</div>
-<div class="line2">1116 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Sandy Harris &quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2907&quot;,&quot;Phone&quot;:&quot;(407) 797-3814&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Michael Harris &quot;,&quot;OtherPhone&quot;:&quot;(352) 205-1616&quot;,&quot;OtherEmail&quot;:&quot;sky470722@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Sandy Harris  — (407) 797-3814</div>
-<div class="line2">2907 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Senthipia Nguyen&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1117&quot;,&quot;Phone&quot;:&quot;(352) 751-0487&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;FOR SALE&quot;}">
-<div class="line1">Senthipia Nguyen — (352) 751-0487</div>
-<div class="line2">1117 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Sharon Peters&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1140&quot;,&quot;Phone&quot;:&quot;(214) 923-8435&quot;,&quot;Email&quot;:&quot;biggs2b@aol.com&quot;,&quot;OtherName&quot;:&quot;Bill Schwieger &quot;,&quot;OtherPhone&quot;:&quot;(920) 381-5561&quot;,&quot;OtherEmail&quot;:&quot;williamschwieger@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Sharon Peters — (214) 923-8435</div>
-<div class="line2">1140 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Steve Burr &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1221&quot;,&quot;Phone&quot;:&quot;(641) 485-2923&quot;,&quot;Email&quot;:&quot;kris52339@gmail.com &quot;,&quot;OtherName&quot;:&quot;Kris Burr&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Steve Burr  — (641) 485-2923</div>
-<div class="line2">1221 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Steve Spiegle&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1133&quot;,&quot;Phone&quot;:&quot;(352) 775-6870&quot;,&quot;Email&quot;:&quot;nataliestephenspiegle@comcast.net &quot;,&quot;OtherName&quot;:&quot;Natalie Spiegle&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Steve Spiegle — (352) 775-6870</div>
-<div class="line2">1133 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Sue Conway&quot;,&quot;StreetNameRaw&quot;:&quot;Panchos Way&quot;,&quot;StreetNo&quot;:&quot;2903&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Larry Conway &quot;,&quot;OtherPhone&quot;:&quot;(631) 875-2868&quot;,&quot;OtherEmail&quot;:&quot;conway615@aol.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Sue Conway</div>
-<div class="line2">2903 Panchos</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Sue Halladay&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1134&quot;,&quot;Phone&quot;:&quot;(616) 723-1234&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Gary Halladay  &quot;,&quot;OtherPhone&quot;:&quot;(616) 262-8989&quot;,&quot;OtherEmail&quot;:&quot;suehalladay5@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Sue Halladay — (616) 723-1234</div>
-<div class="line2">1134 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Sue Schmelzer&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1139&quot;,&quot;Phone&quot;:&quot;(614) 206-1195&quot;,&quot;Email&quot;:&quot;ssmellsir@aol.com&quot;,&quot;OtherName&quot;:&quot;Murray Schmelzer&quot;,&quot;OtherPhone&quot;:&quot;(614) 206-1165&quot;,&quot;OtherEmail&quot;:&quot;hipmurray@gmail.com&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Sue Schmelzer — (614) 206-1195</div>
-<div class="line2">1139 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Sylvia Doyle &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1209&quot;,&quot;Phone&quot;:&quot;(608) 436-6325&quot;,&quot;Email&quot;:&quot;sylvia.doyle@gmail.com &quot;,&quot;OtherName&quot;:&quot;John Doyle &quot;,&quot;OtherPhone&quot;:&quot;(404) 461-9978&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Sylvia Doyle  — (608) 436-6325</div>
-<div class="line2">1209 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Terry Williams&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1208&quot;,&quot;Phone&quot;:&quot;(757) 284-4137&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Donna Williams &quot;,&quot;OtherPhone&quot;:&quot;(757) 771-6450&quot;,&quot;OtherEmail&quot;:&quot;wdonna695@msn.com   &quot;,&quot;PType&quot;:&quot;RENTAL&quot;}">
-<div class="line1">Terry Williams — (757) 284-4137</div>
-<div class="line2">1208 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Thomas Vail&quot;,&quot;StreetNameRaw&quot;:&quot;Liendo Lane&quot;,&quot;StreetNo&quot;:&quot;1110&quot;,&quot;Phone&quot;:&quot;(352) 751-0605&quot;,&quot;Email&quot;:&quot;tomjanette@gmail.com &quot;,&quot;OtherName&quot;:&quot;Janette Vail&quot;,&quot;OtherPhone&quot;:&quot;(352) 598-1738&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Thomas Vail — (352) 751-0605</div>
-<div class="line2">1110 Liendo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Tim Wise&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(303) 907-1812&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Cheryle Wise&quot;,&quot;OtherPhone&quot;:&quot;(303) 907-1012&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Tim Wise — (303) 907-1812</div>
-<div class="line2">1207 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Tom Talbott&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1131&quot;,&quot;Phone&quot;:&quot;(352) 561-4952&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Patty Talbott&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Tom Talbott — (352) 561-4952</div>
-<div class="line2">1131 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Tracy Van Drieson&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1207&quot;,&quot;Phone&quot;:&quot;(340) 514-4236&quot;,&quot;Email&quot;:&quot;tracyjean@live.com&quot;,&quot;OtherName&quot;:&quot;David Van Drieson&quot;,&quot;OtherPhone&quot;:&quot;(340) 514-5892&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Tracy Van Drieson — (340) 514-4236</div>
-<div class="line2">1207 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Trini Froede&quot;,&quot;StreetNameRaw&quot;:&quot;Santa Cruz Drive&quot;,&quot;StreetNo&quot;:&quot;1119&quot;,&quot;Phone&quot;:&quot;(941) 979-7451&quot;,&quot;Email&quot;:&quot;thevillagestrini@gmail.com &quot;,&quot;OtherName&quot;:&quot;&quot;,&quot;OtherPhone&quot;:&quot;&quot;,&quot;OtherEmail&quot;:&quot;&quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Trini Froede — (941) 979-7451</div>
-<div class="line2">1119 Santa Cruz</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;Victoria Terry &quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1101&quot;,&quot;Phone&quot;:&quot;&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Edward Terry &quot;,&quot;OtherPhone&quot;:&quot;(352) 751-3722&quot;,&quot;OtherEmail&quot;:&quot;eterry353@gmail.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">Victoria Terry </div>
-<div class="line2">1101 San Bernardo</div>
-</div>
-<div class="entry" data-json="{&quot;PersonName&quot;:&quot;W.Q Smith&quot;,&quot;StreetNameRaw&quot;:&quot;San Bernardo Road&quot;,&quot;StreetNo&quot;:&quot;1107&quot;,&quot;Phone&quot;:&quot;(352) 259-2322&quot;,&quot;Email&quot;:&quot;&quot;,&quot;OtherName&quot;:&quot;Lori Smith &quot;,&quot;OtherPhone&quot;:&quot;(913) 244-9320&quot;,&quot;OtherEmail&quot;:&quot;slj12721@yahoo.com &quot;,&quot;PType&quot;:&quot;&quot;}">
-<div class="line1">W.Q Smith — (352) 259-2322</div>
-<div class="line2">1107 San Bernardo</div>
-</div>
-
-    </div>
-
-    <!-- DETAIL PANEL -->
-    <div id="detailPanel"></div>
-
-    <script>
-        /* Register service worker */
-        if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js');
+        let d = document.getElementById('detail');
+        if (!d) {
+            d = document.createElement('div');
+            d.id = 'detail';
+            document.body.appendChild(d);
         }
 
-        /* Insert verbal month + year */
-        const months = [
-        "January","February","March","April","May","June",
-        "July","August","September","October","November","December"
-        ];
-        const now = new Date();
-        document.getElementById("splashDate").innerText =
-        months[now.getMonth()] + " " + now.getFullYear();
+        let pType = p.PType ? `<div>${p.PType}</div>` : '';
+        let addr = `<div>${p.StreetNo} ${p.StreetNameRaw}</div>`;
 
-        /* EVERYTHING runs AFTER the page is fully loaded */
-        window.onload = () => {
+        let left = `
+            <div>
+                <div>${p.PersonName}</div>
+                ${p.Email ? `<div class='indent'>${p.Email}</div>` : ''}
+                ${p.Phone ? `<div class='indent'>${p.Phone}</div>` : ''}
+            </div>
+        `;
 
-        /* Splash fade-out */
-        setTimeout(() => {
-        const splash = document.getElementById("splash");
-        splash.style.opacity = 0;
+        let right = `
+            <div>
+                <div>${p.OtherName}</div>
+                ${p.OtherEmail ? `<div class='indent'>${p.OtherEmail}</div>` : ''}
+                ${p.OtherPhone ? `<div class='indent'>${p.OtherPhone}</div>` : ''}
+            </div>
+        `;
 
-        setTimeout(() => {
-        splash.style.display = "none";
-        document.getElementById("searchBar").style.display = "block";
-        document.getElementById("listWindow").style.display = "block";
-        document.getElementById("detailPanel").style.display = "block";
-        }, 1000);
-        }, 2000);
+        d.innerHTML = pType + addr + `<div class='cols'>` + left + right + `</div>`;
+    });
+});
 
-        /* Search logic */
-        const searchInput = document.getElementById('searchInput');
-        const entries = document.querySelectorAll('.entry');
-
-        searchInput.addEventListener('input', () => {
-        const q = searchInput.value.toLowerCase();
-        entries.forEach(e => {
-        const data = JSON.parse(e.getAttribute('data-json'));
-        const hay = (
-        data.PersonName + " " +
-        data.StreetNo + " " +
-        data.StreetNameRaw
-        ).toLowerCase();
-        e.style.display = hay.includes(q) ? "" : "none";
-        });
-        });
-
-        /* Detail panel click handler */
-        const detail = document.getElementById('detailPanel');
-
-        entries.forEach(e => {
-        e.addEventListener('click', () => {
-        const d = JSON.parse(e.getAttribute('data-json'));
-
-        let html = "";
-
-        if (d.PType && d.PType.trim() !== "")
-        html += d.PType + "<br>";
-
-        html += d.StreetNo + " " + d.StreetNameRaw + "<br><br>";
-
-        html += "<div class='flexrow'>";
-
-        html += "<div>";
-        html += d.PersonName + "<br>";
-        if (d.Email && d.Email.trim() !== "")
-        html += "<div class='indent'>" + d.Email + "</div>";
-        if (d.Phone && d.Phone.trim() !== "")
-        html += "<div class='indent'>" + d.Phone + "</div>";
-        html += "</div>";
-
-        if (d.OtherName && d.OtherName.trim() !== "") {
-        html += "<div>";
-        html += d.OtherName + "<br>";
-        if (d.OtherEmail && d.OtherEmail.trim() !== "")
-        html += "<div class='indent'>" + d.OtherEmail + "</div>";
-        if (d.OtherPhone && d.OtherPhone.trim() !== "")
-        html += "<div class='indent'>" + d.OtherPhone + "</div>";
-        html += "</div>";
-        }
-
-        html += "</div>";
-
-        detail.innerHTML = html;
-        });
-        });
-        };
-    </script>
-
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker Registered'))
+    .catch(err => console.log('SW registration failed:', err));
+}
+</script>
 </body>
 </html>
