@@ -26,6 +26,53 @@ body { font-family: Arial, sans-serif; background:#f7fcf8; margin:0; padding:0; 
 <script>
 window.onload = function(){ setTimeout(function(){ var s=document.getElementById('splash'); s.style.transition='opacity 1s'; s.style.opacity='0'; setTimeout(function(){ s.remove(); },1000); },2000); };
 
+function clearHighlight(node) {
+    if (!node) return;
+    if (node.nodeType === 1) { // element
+        var spans = node.querySelectorAll('span.__hl');
+        for (var i = 0; i < spans.length; i++) {
+            var s = spans[i];
+            var parent = s.parentNode;
+            while (s.firstChild) parent.insertBefore(s.firstChild, s);
+            parent.removeChild(s);
+        }
+    }
+}
+
+function highlightNode(node, q) {
+    if (!node || !q) return;
+    if (node.nodeType === 3) { // text
+        var text = node.nodeValue;
+        var idx = text.toLowerCase().indexOf(q);
+        if (idx >= 0) {
+            var span = document.createElement('span');
+            span.className = '__hl';
+            span.style.background = 'yellow';
+
+            var before = document.createTextNode(text.substring(0, idx));
+            var match = document.createTextNode(text.substring(idx, idx + q.length));
+            var after = document.createTextNode(text.substring(idx + q.length));
+
+            var parent = node.parentNode;
+            parent.insertBefore(before, node);
+            parent.insertBefore(span, node);
+            span.appendChild(match);
+            parent.insertBefore(after, node);
+            parent.removeChild(node);
+
+            // continue highlighting in 'after'
+            highlightNode(after, q);
+        }
+    } else if (node.nodeType === 1) { // element
+        // don't highlight inside script/style
+        var tag = node.tagName.toLowerCase();
+        if (tag === 'script' || tag === 'style') return;
+        for (var i = 0; i < node.childNodes.length; i++) {
+            highlightNode(node.childNodes[i], q);
+        }
+    }
+}
+
 function doSearch() {
     var q = document.getElementById('searchInput').value.toLowerCase();
     var entries = document.getElementsByClassName('entry');
@@ -33,29 +80,21 @@ function doSearch() {
     for (var i = 0; i < entries.length; i++) {
         var e = entries[i];
         var orig = e.getAttribute('data-original-html');
+        e.innerHTML = orig; // reset
 
-        // Extract visible text only
         var temp = document.createElement('div');
         temp.innerHTML = orig;
         var visibleText = temp.innerText.toLowerCase();
 
         if (q === '') {
-            e.innerHTML = orig;
             e.style.display = 'block';
             continue;
         }
 
         if (visibleText.indexOf(q) >= 0) {
-            // Highlight only visible text
-            var html = orig;
-
-            var parts = orig.split(/(<[^>]+>)/g); // split into text + tags
-            for (var p = 0; p < parts.length; p++) {
-                if (parts[p].startsWith('<')) continue; // skip tags
-                parts[p] = parts[p].replace(new RegExp(q, 'gi'),
-                    function(m) { return '<span style="background:yellow">' + m + '</span>'; });
-            }
-            e.innerHTML = parts.join('');
+            // highlight only visible text via DOM
+            clearHighlight(e);
+            highlightNode(e, q);
             e.style.display = 'block';
         } else {
             e.style.display = 'none';
@@ -63,7 +102,7 @@ function doSearch() {
     }
 }
 
-function showDetail(jsonStr){ var d=JSON.parse(jsonStr); var panel=document.getElementById('detailPanel'); panel.innerHTML=''; if(d.PType) panel.innerHTML+='<div class="detail-type">'+d.PType+'</div>'; panel.innerHTML+='<div class="detail-address"><b>'+d.StreetNo+' '+d.StreetNameRaw+'</b><span class="addr-ts">Rel. 20260708011323</span></div>'; var html='<div class="cols">'; html+='<div class="col">'; html+='<div class="col-name">'+d.PersonName+'</div>'; if(d.Email) html+='<div class="indent"><a href="mailto:'+d.Email+'">'+d.Email+'</a></div>'; if(d.Phone) html+='<div class="indent"><a href="tel:'+d.Phone+'">'+d.Phone+'</a></div>'; html+='</div>'; html+='<div class="col">'; if(d.OtherName) html+='<div class="col-name">'+d.OtherName+'</div>'; if(d.OtherEmail) html+='<div class="indent"><a href="mailto:'+d.OtherEmail+'">'+d.OtherEmail+'</a></div>'; if(d.OtherPhone) html+='<div class="indent"><a href="tel:'+d.OtherPhone+'">'+d.OtherPhone+'</a></div>'; html+='</div>'; html+='</div>'; panel.innerHTML+=html; }
+function showDetail(jsonStr){ var d=JSON.parse(jsonStr); var panel=document.getElementById('detailPanel'); panel.innerHTML=''; if(d.PType) panel.innerHTML+='<div class="detail-type">'+d.PType+'</div>'; panel.innerHTML+='<div class="detail-address"><b>'+d.StreetNo+' '+d.StreetNameRaw+'</b><span class="addr-ts">Rel. 20260708013757</span></div>'; var html='<div class="cols">'; html+='<div class="col">'; html+='<div class="col-name">'+d.PersonName+'</div>'; if(d.Email) html+='<div class="indent"><a href="mailto:'+d.Email+'">'+d.Email+'</a></div>'; if(d.Phone) html+='<div class="indent"><a href="tel:'+d.Phone+'">'+d.Phone+'</a></div>'; html+='</div>'; html+='<div class="col">'; if(d.OtherName) html+='<div class="col-name">'+d.OtherName+'</div>'; if(d.OtherEmail) html+='<div class="indent"><a href="mailto:'+d.OtherEmail+'">'+d.OtherEmail+'</a></div>'; if(d.OtherPhone) html+='<div class="indent"><a href="tel:'+d.OtherPhone+'">'+d.OtherPhone+'</a></div>'; html+='</div>'; html+='</div>'; panel.innerHTML+=html; }
 </script>
 </head>
 <body>
