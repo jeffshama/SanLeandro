@@ -1,45 +1,32 @@
-﻿const CACHE_NAME = 'sanleandro-cache-v1';
-
-const FILES_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json',
-  './images/icon-32.png',
-  './images/icon-48.png',
-  './images/icon-192.png',
-  './images/icon-512.png'
+const CACHE_NAME = 'sanleandro-cache-20260711063809';
+const URLS_TO_CACHE = [
+  'index.html?rel=20260711063809',
+  'manifest.json?rel=20260711063809',
+  'sanleandro-icon.png'
 ];
-
-// Install SW and cache files
-self.addEventListener('install', event => {
+self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(FILES_TO_CACHE);
+    caches.open(CACHE_NAME).then(function(cache) {
+      return cache.addAll(URLS_TO_CACHE);
     })
   );
-  self.skipWaiting();
 });
-
-// Activate SW and remove old caches
-self.addEventListener('activate', event => {
+self.addEventListener('activate', function(event) {
   event.waitUntil(
-    caches.keys().then(keyList =>
-      Promise.all(
-        keyList.map(key => {
+    caches.keys().then(function(keys) {
+      return Promise.all(
+        keys.map(function(key) {
           if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
         })
-      )
-    )
+      );
+    })
   );
-  self.clients.claim();
 });
-
-// Fetch handler
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request).then(response => {
+    caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
     })
   );
