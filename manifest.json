@@ -1,13 +1,13 @@
 {
-  "name": "Stoner Directory",
-  "short_name": "Directory",
-  "start_url": "./index.html",
+  "name": "San Leandro Directory",
+  "short_name": "San Leandro",
+  "start_url": "index.html?rel=20260918123948",
   "display": "standalone",
-  "background_color": "#E8F5E9",
-  "theme_color": "#C8E6C9",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "images/splash.png",
+      "src": "sanleandro-icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
