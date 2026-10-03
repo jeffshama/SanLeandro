@@ -1,8 +1,8 @@
 ﻿
-const CACHE_NAME = 'sanleandro-v092226';
+const CACHE_NAME = 'sanleandro-v100326';
 const ASSETS_TO_CACHE = [
-  'index.html?rel=092226',
-  'manifest.json?rel=092226',
+  'index.html?rel=100326',
+  'manifest.json?rel=100326',
   'sanleandro-icon.png'
 ];
 
