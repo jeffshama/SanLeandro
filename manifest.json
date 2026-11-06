@@ -1,13 +1,18 @@
-﻿{
+{
   "name": "Villa San Leandro",
   "short_name": "San Leandro",
-  "start_url": "index.html?rel=100326",
+  "start_url": "index.html?rel=110626",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "sanleandro-icon.png?v=100326",
+      "src": "images/sanleandro-icon-192.png?v=110626",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/sanleandro-icon-512.png?v=110626",
       "sizes": "512x512",
       "type": "image/png"
     }

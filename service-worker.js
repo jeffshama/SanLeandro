@@ -1,9 +1,10 @@
-﻿
-const CACHE_NAME = 'sanleandro-v100326';
+
+const CACHE_NAME = 'sanleandro-v110626';
 const ASSETS_TO_CACHE = [
-  'index.html?rel=100326',
-  'manifest.json?rel=100326',
-  'sanleandro-icon.png'
+  'index.html?rel=110626',
+  'manifest.json?rel=110626',
+  'images/sanleandro-icon-192.png?v=110626',
+  'images/sanleandro-icon-512.png?v=110626'
 ];
 
 self.addEventListener('install', (event) => {
